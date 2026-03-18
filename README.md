@@ -102,7 +102,26 @@ Acesse: `http://localhost:3000`
 
 ## 📦 Deploy
 
-### GitHub Pages
+### ⚡ Vercel (Recomendado - 5 minutos)
+
+**👉 GUIA COMPLETO**: [`.documentation/DEPLOY_VERCEL.md`](.documentation/DEPLOY_VERCEL.md)
+
+**Passos rápidos**:
+1. Acesse: [vercel.com/new](https://vercel.com/new)
+2. Importe: `rodrigodionizio/avisosEENSA`
+3. Configure variáveis de ambiente:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+4. Clique em **Deploy**!
+
+✅ Deploy automático a cada push na `main`  
+✅ HTTPS gratuito  
+✅ CDN global  
+✅ Preview deploys automáticos
+
+---
+
+### GitHub Pages (Alternativo)
 
 O deploy é automático via GitHub Actions ao fazer push para a branch `main`.
 
