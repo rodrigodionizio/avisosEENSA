@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EENSA — Preview do Sistema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   EENSA DESIGN SYSTEM
+═══════════════════════════════════════════ */
+:root {
+  --bg:           #F3F8F0;
+  --surface:      #FFFFFF;
+  --surface2:     #EBF4E6;
+  --surface3:     #E0F0E6;
+  --green:        #1A6B2E;
+  --green-mid:    #2D8A47;
+  --green-lt:     #A8D8B4;
+  --green-xlt:    #D4EADB;
+  --teal:         #2BAAC7;
+  --teal-lt:      #C4EAF4;
+  --teal-border:  #9ED8EC;
+  --orange:       #F28C30;
+  --orange-lt:    #FDECD8;
+  --orange-border:#F5C9A0;
+  --yellow:       #F5C840;
+  --yellow-lt:    #FEF7DC;
+  --yellow-border:#F0DA90;
+  --red:          #E05530;
+  --red-lt:       #FBEDE8;
+  --text:         #1A3A22;
+  --text2:        #4A7A5A;
+  --text3:        #7DAA8A;
+  --border:       #D4EADB;
+  --r-sm:  8px;
+  --r-md:  14px;
+  --r-lg:  20px;
+  --sh-sm: 0 2px 8px rgba(26,107,46,.07);
+  --sh-md: 0 4px 20px rgba(26,107,46,.11);
+  --sh-lg: 0 8px 40px rgba(26,107,46,.16);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: #1A3A22;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,h2,h3,h4,h5 { font-family: 'Nunito', sans-serif; }
+
+/* ── PREVIEW SHELL ─────────────────────────── */
+.preview-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* TOP NAV (preview controls) */
+.preview-nav {
+  background: #0F2218;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+}
+.preview-brand {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  margin-right: 24px;
+  white-space: nowrap;
+  letter-spacing: .5px;
+}
+.preview-brand span { color: #A8D8B4; }
+.nav-tabs { display: flex; gap: 2px; flex: 1; overflow-x: auto; }
+.nav-tab {
+  padding: 6px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: rgba(255,255,255,.45);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all .15s;
+  letter-spacing: .3px;
+}
+.nav-tab:hover { color: rgba(255,255,255,.8); background: rgba(255,255,255,.05); }
+.nav-tab.active { color: #A8D8B4; background: rgba(168,216,180,.12); }
+.nav-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+.dot-pub    { background: #2BAAC7; }
+.dot-admin  { background: #F28C30; }
+.dot-login  { background: #A8D8B4; }
+.dot-tv     { background: #F5C840; }
+.dot-modal  { background: #7DAA8A; }
+
+/* FRAME */
+.preview-frame {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
+  display: none;
+}
+.preview-frame.active { display: block; }
+
+/* ═══════════════════════════════════════════
+   COMPONENTES GLOBAIS
+═══════════════════════════════════════════ */
+
+/* HEADER */
+.app-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--sh-sm);
+  animation: slideDown .35s ease;
+}
+@keyframes slideDown { from { transform: translateY(-100%); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+
+.header-brand { display: flex; align-items: center; gap: 14px; }
+.header-logo-mark {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(26,107,46,.25);
+}
+.header-text-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--green);
+  line-height: 1.15;
+}
+.header-text-sub {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+  letter-spacing: .4px;
+}
+.header-nav { display: flex; align-items: center; gap: 8px; }
+.tabs-bar {
+  display: flex;
+  gap: 3px;
+  background: var(--surface2);
+  padding: 4px;
+  border-radius: 10px;
+}
+.tab-btn {
+  padding: 7px 18px;
+  border-radius: 7px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  transition: all .18s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: var(--surface);
+  color: var(--green);
+  box-shadow: 0 1px 6px rgba(26,107,46,.1);
+}
+
+/* BOTÕES */
+.btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  padding: 8px 16px;
+  transition: all .18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+.btn-primary {
+  background: var(--green);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--green-mid);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(26,107,46,.3);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--green);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover { background: var(--green-xlt); }
+.btn-danger {
+  background: var(--red-lt);
+  color: var(--red);
+  border: 1.5px solid #f5c5b8;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text2);
+  padding: 8px 10px;
+}
+.btn-ghost:hover { background: var(--surface2); color: var(--green); }
+.btn-sm { font-size: 12px; padding: 5px 11px; border-radius: 6px; }
+.btn-icon { width: 34px; height: 34px; padding: 0; justify-content: center; border-radius: 8px; font-size: 15px; }
+.btn-tv {
+  background: var(--green);
+  color: rgba(255,255,255,.9);
+  border: none;
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .18s;
+}
+.btn-tv:hover { background: var(--green-mid); transform: translateY(-1px); }
+.btn-new {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 9px 18px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .18s;
+  box-shadow: var(--sh-sm);
+}
+.btn-new:hover {
+  background: var(--green-mid);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(26,107,46,.25);
+}
+
+/* BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: .2px;
+}
+.badge-urgente { background: var(--orange-lt); color: #A04010; border: 1px solid var(--orange-border); }
+.badge-normal  { background: var(--teal-lt);   color: #1A7A95; border: 1px solid var(--teal-border); }
+.badge-info    { background: var(--yellow-lt);  color: #8A6A00; border: 1px solid var(--yellow-border); }
+.badge-expirado{ background: #F0F0F0; color: #888; border: 1px solid #DDD; }
+.chip {
+  display: inline-block;
+  background: var(--surface2);
+  color: var(--text2);
+  border-radius: 20px;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  font-family: 'Nunito', sans-serif;
+}
+
+/* PAGE WRAPPER */
+.page { max-width: 860px; margin: 0 auto; padding: 32px 24px 72px; }
+.page-wide { max-width: 1060px; margin: 0 auto; padding: 32px 24px 72px; }
+
+/* ── TELA PÚBLICA ─────────────────────────── */
+
+/* URGENTE BANNER */
+.urgente-banner {
+  background: linear-gradient(90deg, #FFF3E6 0%, var(--orange-lt) 100%);
+  border: 1.5px solid var(--orange-border);
+  border-radius: var(--r-md);
+  padding: 11px 18px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #8A3A10;
+  animation: pulseBar 3s ease-in-out infinite;
+}
+@keyframes pulseBar {
+  0%,100% { box-shadow: 0 0 0 0 rgba(242,140,48,.0) }
+  50%      { box-shadow: 0 0 0 6px rgba(242,140,48,.08) }
+}
+.urgente-banner-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: blink 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* SECTION LABELS */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+.section-divider-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.section-divider-line {
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+  border-radius: 1px;
+}
+.section-count {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+}
+
+/* AVISO CARDS */
+.aviso-card {
+  background: var(--surface);
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  padding: 20px 22px 18px 28px;
+  margin-bottom: 12px;
+  box-shadow: var(--sh-sm);
+  transition: transform .2s ease, box-shadow .2s ease;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn .35s ease both;
+}
+@keyframes cardIn {
+  from { transform: translateY(12px); opacity: 0 }
+  to   { transform: translateY(0);    opacity: 1 }
+}
+.aviso-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sh-md);
+}
+.aviso-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  border-radius: var(--r-md) 0 0 var(--r-md);
+}
+.aviso-card.urgente::before { background: linear-gradient(180deg, var(--orange) 0%, #E05530 100%); }
+.aviso-card.urgente         { background: linear-gradient(135deg, #FFFAF5 0%, var(--orange-lt) 100%); border-color: var(--orange-border); }
+.aviso-card.normal::before  { background: var(--teal); }
+.aviso-card.normal          { background: linear-gradient(135deg, #FAFEFF 0%, #F0FAFD 100%); border-color: var(--teal-border); }
+.aviso-card.info::before    { background: var(--yellow); }
+.aviso-card.info            { background: linear-gradient(135deg, #FFFEF5 0%, var(--yellow-lt) 100%); border-color: var(--yellow-border); }
+
+.aviso-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+.aviso-badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 7px; }
+.aviso-titulo {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.3;
+}
+.aviso-titulo.urgente-txt { color: #8A3208; }
+.aviso-body {
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.aviso-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid rgba(212,234,219,.6);
+}
+.meta-item {
+  font-size: 12px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.expira-hoje   { color: var(--red); font-weight: 700; }
+.expira-breve  { color: var(--orange); font-weight: 700; }
+.expira-normal { color: var(--text3); }
+.aviso-actions { display: flex; gap: 5px; flex-shrink: 0; }
+
+/* PAGE HEADER */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  animation: fadeIn .4s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: translateY(0) } }
+.page-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--green);
+  line-height: 1.2;
+}
+.page-sub { font-size: 13px; color: var(--text3); margin-top: 3px; }
+
+/* ── STATS CARDS ──────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 30px;
+  animation: fadeIn .45s ease .1s both;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 20px 20px 18px;
+  transition: transform .18s, box-shadow .18s;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--sh-sm); }
+.stat-num {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 1;
+  margin-bottom: 5px;
+  color: var(--green);
+}
+.stat-label { font-size: 12px; color: var(--text3); font-weight: 500; }
+
+/* ── ADMIN TABLE ──────────────────────────── */
+.admin-list { background: var(--surface); border-radius: var(--r-md); border: 1.5px solid var(--border); overflow: hidden; box-shadow: var(--sh-sm); }
+.admin-list-header {
+  padding: 14px 20px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface2);
+}
+.admin-list-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text);
+}
+.admin-row {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: background .12s;
+  animation: cardIn .3s ease both;
+}
+.admin-row:last-child { border-bottom: none; }
+.admin-row:hover { background: var(--bg); }
+.admin-row-main { flex: 1; min-width: 0; }
+.admin-row-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  margin: 5px 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.admin-row-meta { font-size: 12px; color: var(--text3); }
+
+/* ── MODAL ────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,58,34,.32);
+  backdrop-filter: blur(4px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeOverlay .2s ease;
+}
+@keyframes fadeOverlay { from { opacity: 0 } to { opacity: 1 } }
+.modal {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 30px 28px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 24px 64px rgba(26,58,34,.22);
+  animation: modalUp .25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes modalUp {
+  from { transform: translateY(24px) scale(.97); opacity: 0 }
+  to   { transform: translateY(0)    scale(1);   opacity: 1 }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.modal-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 19px;
+  color: var(--green);
+}
+.modal-close {
+  width: 32px; height: 32px;
+  border: none; cursor: pointer;
+  background: var(--surface2);
+  border-radius: 8px;
+  color: var(--text2);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.modal-close:hover { background: var(--green-xlt); color: var(--green); }
+.form-group { margin-bottom: 17px; }
+.form-label {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 6px;
+}
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  outline: none;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(45,138,71,.12);
+  background: #fff;
+}
+.form-textarea { resize: vertical; min-height: 90px; line-height: 1.65; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.char-count { font-size: 11px; color: var(--text3); text-align: right; margin-top: 4px; }
+
+/* PRIORITY BUTTONS */
+.priority-buttons { display: flex; gap: 8px; }
+.priority-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  transition: all .15s;
+  color: var(--text2);
+  line-height: 1.3;
+}
+.priority-btn:hover { border-color: var(--green-lt); background: var(--surface2); }
+.priority-btn.sel-urgente { border-color: var(--orange); background: var(--orange-lt); color: #A04010; }
+.priority-btn.sel-normal  { border-color: var(--teal);   background: var(--teal-lt);   color: #1A7A95; }
+.priority-btn.sel-info    { border-color: var(--yellow);  background: var(--yellow-lt);  color: #8A6A00; }
+
+/* ── LOGIN ────────────────────────────────── */
+.login-frame {
+  min-height: calc(100vh - 52px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 32px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.login-bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,216,180,.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+.login-card {
+  background: var(--surface);
+  border-radius: 22px;
+  padding: 44px 36px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--sh-lg);
+  text-align: center;
+  border: 1.5px solid var(--border);
+  position: relative;
+  z-index: 1;
+  animation: modalUp .4s cubic-bezier(.34,1.56,.64,1);
+}
+.login-logo-mark {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: -1px;
+  margin: 0 auto 20px;
+  box-shadow: 0 6px 20px rgba(26,107,46,.3);
+}
+.login-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.login-sub { font-size: 13px; color: var(--text3); margin-bottom: 30px; }
+.login-hint {
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 9px 12px;
+  margin-bottom: 16px;
+  text-align: left;
+  border: 1px solid var(--border);
+  line-height: 1.6;
+}
+
+/* ── MODO TV ──────────────────────────────── */
+.tv-frame { background: var(--bg); }
+.tv-clock-bar {
+  background: var(--green);
+  color: rgba(255,255,255,.95);
+  padding: 10px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(26,107,46,.2);
+}
+.tv-clock-time { font-size: 19px; font-weight: 900; letter-spacing: 1px; }
+.tv-logo-bar {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tv-logo-mark {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: -1px;
+  box-shadow: 0 3px 10px rgba(26,107,46,.25);
+}
+.tv-brand-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--green);
+}
+.tv-brand-sub { font-size: 12px; color: var(--text3); font-weight: 500; letter-spacing: .5px; }
+.tv-page { max-width: 1000px; margin: 0 auto; padding: 28px 28px 60px; }
+.tv .aviso-card { margin-bottom: 16px; }
+.tv .aviso-titulo { font-size: 20px !important; }
+.tv .aviso-body   { font-size: 16px !important; }
+.tv .badge        { font-size: 12px !important; padding: 4px 12px !important; }
+.tv-back-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(26,107,46,.85);
+  color: rgba(255,255,255,.8);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all .18s;
+}
+.tv-back-btn:hover { background: var(--green); color: #fff; }
+
+/* ── TOAST ────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--green);
+  color: #fff;
+  border-radius: var(--r-sm);
+  padding: 13px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 8px 28px rgba(26,107,46,.35);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: toastIn .25s cubic-bezier(.34,1.56,.64,1);
+  max-width: 340px;
+}
+@keyframes toastIn {
+  from { transform: translateX(60px); opacity: 0 }
+  to   { transform: translateX(0);    opacity: 1 }
+}
+.toast.success { background: var(--green); }
+.toast.error   { background: #C04030; }
+
+/* ── EMPTY STATE ──────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 56px 24px;
+  color: var(--text3);
+  animation: fadeIn .4s ease;
+}
+.empty-icon { font-size: 48px; margin-bottom: 14px; opacity: .7; }
+.empty-text { font-size: 15px; line-height: 1.6; }
+
+/* ── LOADING SKELETON ─────────────────────── */
+.skeleton {
+  border-radius: var(--r-md);
+  background: linear-gradient(90deg, var(--surface2) 25%, #EAF3E5 50%, var(--surface2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+.skeleton-card { height: 110px; margin-bottom: 12px; }
+.skeleton-sm { height: 16px; margin-bottom: 8px; border-radius: 6px; }
+.skeleton-sm:last-child { width: 60%; }
+
+/* ── SEÇÃO DE AVISOS ─────────────────────── */
+.avisos-section { margin-bottom: 32px; }
+
+/* ── SCROLLBAR ────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--green-lt); border-radius: 3px; }
+
+/* ── TAGS DE NOTIFICAÇÃO REAL-TIME ───────── */
+.rt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(43,170,199,.12);
+  color: var(--teal);
+  border: 1px solid rgba(43,170,199,.3);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+}
+.rt-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: blink 1.2s ease-in-out infinite;
+}
+</style>
+</head>
+<body>
+
+<div class="preview-shell">
+
+  <!-- ─── BARRA DE NAVEGAÇÃO DO PREVIEW ────── -->
+  <nav class="preview-nav">
+    <div class="preview-brand">EENSA <span>Preview</span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-view="public" onclick="switchView('public')">
+        <span class="nav-dot dot-pub"></span>Tela Pública
+      </button>
+      <button class="nav-tab" data-view="admin" onclick="switchView('admin')">
+        <span class="nav-dot dot-admin"></span>Painel Admin
+      </button>
+      <button class="nav-tab" data-view="login" onclick="switchView('login')">
+        <span class="nav-dot dot-login"></span>Login
+      </button>
+      <button class="nav-tab" data-view="tv" onclick="switchView('tv')">
+        <span class="nav-dot dot-tv"></span>Modo TV
+      </button>
+      <button class="nav-tab" data-view="modal" onclick="switchView('modal')">
+        <span class="nav-dot dot-modal"></span>Modal — Novo Aviso
+      </button>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════
+       VIEW 1 — TELA PÚBLICA
+  ════════════════════════════════════════ -->
+  <div id="view-public" class="preview-frame active">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="header-logo-mark">EE</div>
+        <div>
+          <div class="header-text-title">EENSA</div>
+          <div class="header-text-sub">Construindo Histórias...</div>
+        </div>
+      </div>
+      <div class="header-nav">
+        <div class="tabs-bar">
+          <button class="tab-btn active">📢 Avisos</button>
+          <button class="tab-btn" onclick="switchView('admin')">⚙️ Gestão</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">Quadro de Avisos</div>
+          <div class="page-sub" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <span>6 avisos ativos</span>
+            <span class="rt-pill"><span class="rt-dot"></span>Atualizando em tempo real</span>
+          </div>
+        </div>
+        <button class="btn-tv" onclick="switchView('tv')">📺 Modo TV</button>
+      </div>
+
+      <!-- Banner urgente -->
+      <div class="urgente-banner">
+        <span class="urgente-banner-dot"></span>
+        2 avisos urgentes — leia com atenção
+      </div>
+
+      <!-- URGENTES -->
+      <div class="avisos-section">
+        <div class="section-divider">
+          <span class="section-divider-label">🔴 Urgentes</span>
+          <div class="section-divider-line"></div>
+          <span class="section-count">2</span>
+        </div>
+
+        <div class="aviso-card urgente" style="animation-delay:.05s">
+          <div class="aviso-badges">
+            <span class="badge badge-urgente">🔴 Urgente</span>
+            <span class="chip">Reunião</span>
+          </div>
+          <div class="aviso-titulo urgente-txt">Reunião de Pais — Presença Obrigatória</div>
+          <div class="aviso-body" style="margin-top:8px;">
+            Reunião obrigatória com os pais dos alunos do 9º ano na <strong style="color:#8A3208;">sexta-feira, 22/03</strong>, às 18h no auditório. A participação é indispensável para tratar de assuntos urgentes sobre o desempenho da turma.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Direção</span>
+            <span class="meta-item">🕒 18/03/2025 às 09:14</span>
+            <span class="meta-item expira-hoje">⏰ Expira hoje</span>
+          </div>
+        </div>
+
+        <div class="aviso-card urgente" style="animation-delay:.12s">
+          <div class="aviso-badges">
+            <span class="badge badge-urgente">🔴 Urgente</span>
+            <span class="chip">Avaliações</span>
+          </div>
+          <div class="aviso-titulo urgente-txt">Calendário de Avaliações — 1º Bimestre</div>
+          <div class="aviso-body" style="margin-top:8px;">
+            As avaliações do 1º bimestre ocorrerão entre os dias <strong style="color:#8A3208;">25 e 29 de março</strong>. Consulte o cronograma completo no mural da secretaria ou no site da escola. Não haverá segunda chamada sem justificativa médica.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Coordenação Pedagógica</span>
+            <span class="meta-item">🕒 17/03/2025 às 14:30</span>
+            <span class="meta-item expira-breve">⚡ Expira em 2 dias</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMUNICADOS -->
+      <div class="avisos-section">
+        <div class="section-divider">
+          <span class="section-divider-label">🔵 Comunicados</span>
+          <div class="section-divider-line"></div>
+          <span class="section-count">2</span>
+        </div>
+
+        <div class="aviso-card normal" style="animation-delay:.2s">
+          <div class="aviso-badges">
+            <span class="badge badge-normal">🔵 Normal</span>
+            <span class="chip">Esportes</span>
+          </div>
+          <div class="aviso-titulo">Campeonato Interturmas de Futsal</div>
+          <div class="aviso-body" style="margin-top:8px;">
+            Inscrições abertas para o Campeonato Interturmas! Formulários disponíveis na sala de Educação Física com o Prof. Carlos. Prazo para inscrição: <strong style="color:#1A6B2E;">20 de março</strong>. Máximo 10 jogadores por turma.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Prof. Carlos — Ed. Física</span>
+            <span class="meta-item">🕒 15/03/2025 às 11:00</span>
+            <span class="meta-item expira-normal">📅 Até 20/03/2025</span>
+          </div>
+        </div>
+
+        <div class="aviso-card normal" style="animation-delay:.27s">
+          <div class="aviso-badges">
+            <span class="badge badge-normal">🔵 Normal</span>
+            <span class="chip">Cultura</span>
+          </div>
+          <div class="aviso-titulo">Biblioteca — Semana da Leitura</div>
+          <div class="aviso-body" style="margin-top:8px;">
+            A Semana da Leitura acontece de 24 a 28 de março. Traga seu livro favorito, participe dos círculos de conversa e concorra a prêmios! Inscrições na biblioteca.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Profa. Ana — Biblioteca</span>
+            <span class="meta-item">🕒 14/03/2025 às 08:45</span>
+            <span class="meta-item expira-normal">📅 Até 28/03/2025</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFORMATIVOS -->
+      <div class="avisos-section">
+        <div class="section-divider">
+          <span class="section-divider-label">🟡 Informativos</span>
+          <div class="section-divider-line"></div>
+          <span class="section-count">2</span>
+        </div>
+
+        <div class="aviso-card info" style="animation-delay:.34s">
+          <div class="aviso-badges">
+            <span class="badge badge-info">🟡 Informativo</span>
+            <span class="chip">Geral</span>
+          </div>
+          <div class="aviso-titulo">Uso do Uniforme — Obrigatório a partir de segunda</div>
+          <div class="aviso-body" style="margin-top:8px;">
+            A partir de segunda-feira, 24/03, o uso do uniforme completo é obrigatório para todos os alunos: camiseta da escola, calça ou saia e tênis branco.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Direção</span>
+            <span class="meta-item">🕒 17/03/2025 às 16:00</span>
+            <span class="meta-item expira-normal">📅 Até 24/04/2025</span>
+          </div>
+        </div>
+
+        <div class="aviso-card info" style="animation-delay:.41s">
+          <div class="aviso-badges">
+            <span class="badge badge-info">🟡 Informativo</span>
+            <span class="chip">Evento</span>
+          </div>
+          <div class="aviso-titulo">Excursão ao Museu Estadual de Ciências</div>
+          <div class="aviso-body" style="margin-top:8px;">
+            Turmas do 7º e 8º anos farão excursão ao Museu Estadual de Ciências no dia 28/03. A autorização deve ser entregue na secretaria até 25/03. Custo: gratuito.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Coordenação</span>
+            <span class="meta-item">🕒 16/03/2025 às 10:20</span>
+            <span class="meta-item expira-normal">📅 Até 25/03/2025</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page -->
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       VIEW 2 — PAINEL ADMIN
+  ════════════════════════════════════════ -->
+  <div id="view-admin" class="preview-frame">
+
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="header-logo-mark">EE</div>
+        <div>
+          <div class="header-text-title">EENSA</div>
+          <div class="header-text-sub">Construindo Histórias...</div>
+        </div>
+      </div>
+      <div class="header-nav">
+        <div class="tabs-bar">
+          <button class="tab-btn" onclick="switchView('public')">📢 Avisos</button>
+          <button class="tab-btn active">⚙️ Gestão</button>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="switchView('login')" style="margin-left:4px;font-size:12px;">Sair</button>
+      </div>
+    </header>
+
+    <div class="page-wide">
+
+      <div class="page-header" style="animation-delay:0s">
+        <div>
+          <div class="page-title">Painel de Gestão</div>
+          <div class="page-sub" style="margin-top:3px;">Bem-vinda, <strong style="color:var(--green)">admin@eensa.edu.br</strong></div>
+        </div>
+        <button class="btn-new" onclick="switchView('modal')">
+          <span style="font-size:16px;line-height:1">+</span> Novo aviso
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Avisos ativos</div>
+        </div>
+        <div class="stat-card" style="border-color:var(--orange-border);">
+          <div class="stat-num" style="color:var(--orange)">2</div>
+          <div class="stat-label">Urgentes</div>
+        </div>
+        <div class="stat-card" style="border-color:var(--teal-border);">
+          <div class="stat-num" style="color:var(--teal)">8</div>
+          <div class="stat-label">Total criados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--text3)">2</div>
+          <div class="stat-label">Expirados</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div class="tabs-bar">
+          <button class="tab-btn active" id="tab-ativos" onclick="showAdminTab('ativos')">📋 Avisos ativos</button>
+          <button class="tab-btn" id="tab-expirados" onclick="showAdminTab('expirados')">📦 Expirados</button>
+        </div>
+        <div class="rt-pill"><span class="rt-dot"></span>Sincronizado</div>
+      </div>
+
+      <!-- Lista ativos -->
+      <div id="admin-ativos" class="admin-list">
+        <div class="admin-list-header">
+          <span class="admin-list-label">6 avisos ativos</span>
+          <span style="font-size:12px;color:var(--text3);">Ordenados por urgência</span>
+        </div>
+
+        <!-- Row urgente -->
+        <div class="admin-row" style="animation-delay:.05s">
+          <div><span class="badge badge-urgente">🔴 Urgente</span></div>
+          <div class="admin-row-main">
+            <div style="margin-bottom:4px;"><span class="chip">Reunião</span></div>
+            <div class="admin-row-title">Reunião de Pais — Presença Obrigatória</div>
+            <div class="admin-row-meta">👤 Direção · <span class="expira-hoje">⏰ Expira hoje</span></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="switchView('modal')">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="animation-delay:.1s">
+          <div><span class="badge badge-urgente">🔴 Urgente</span></div>
+          <div class="admin-row-main">
+            <div style="margin-bottom:4px;"><span class="chip">Avaliações</span></div>
+            <div class="admin-row-title">Calendário de Avaliações — 1º Bimestre</div>
+            <div class="admin-row-meta">👤 Coordenação · <span class="expira-breve">⚡ Expira em 2 dias</span></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="switchView('modal')">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="animation-delay:.15s">
+          <div><span class="badge badge-normal">🔵 Normal</span></div>
+          <div class="admin-row-main">
+            <div style="margin-bottom:4px;"><span class="chip">Esportes</span></div>
+            <div class="admin-row-title">Campeonato Interturmas de Futsal</div>
+            <div class="admin-row-meta">👤 Prof. Carlos · 📅 Até 20/03/2025</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="switchView('modal')">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="animation-delay:.2s">
+          <div><span class="badge badge-normal">🔵 Normal</span></div>
+          <div class="admin-row-main">
+            <div style="margin-bottom:4px;"><span class="chip">Cultura</span></div>
+            <div class="admin-row-title">Biblioteca — Semana da Leitura</div>
+            <div class="admin-row-meta">👤 Profa. Ana · 📅 Até 28/03/2025</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="switchView('modal')">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="animation-delay:.25s">
+          <div><span class="badge badge-info">🟡 Info</span></div>
+          <div class="admin-row-main">
+            <div style="margin-bottom:4px;"><span class="chip">Geral</span></div>
+            <div class="admin-row-title">Uso do Uniforme — Obrigatório a partir de segunda</div>
+            <div class="admin-row-meta">👤 Direção · 📅 Até 24/04/2025</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="switchView('modal')">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+          </div>
+        </div>
+
+        <div class="admin-row" style="animation-delay:.3s">
+          <div><span class="badge badge-info">🟡 Info</span></div>
+          <div class="admin-row-main">
+            <div style="margin-bottom:4px;"><span class="chip">Evento</span></div>
+            <div class="admin-row-title">Excursão ao Museu Estadual de Ciências</div>
+            <div class="admin-row-meta">👤 Coordenação · 📅 Até 25/03/2025</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm" onclick="switchView('modal')">✏️ Editar</button>
+            <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista expirados (hidden) -->
+      <div id="admin-expirados" class="admin-list" style="display:none;">
+        <div class="admin-list-header">
+          <span class="admin-list-label">2 avisos expirados</span>
+          <span style="font-size:12px;color:var(--text3);">Arquivados automaticamente</span>
+        </div>
+        <div class="admin-row" style="opacity:.55;">
+          <div><span class="badge badge-expirado">Expirado</span></div>
+          <div class="admin-row-main">
+            <div class="admin-row-title">Festa Junina 2024 — Confirmação de Presença</div>
+            <div class="admin-row-meta">👤 Direção · Expirou em 12/06/2024</div>
+          </div>
+          <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+        </div>
+        <div class="admin-row" style="opacity:.55;">
+          <div><span class="badge badge-expirado">Expirado</span></div>
+          <div class="admin-row-main">
+            <div class="admin-row-title">Reposição de Aula — Sábado 08/03</div>
+            <div class="admin-row-meta">👤 Coordenação · Expirou em 08/03/2025</div>
+          </div>
+          <button class="btn btn-danger btn-sm btn-icon">🗑️</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       VIEW 3 — LOGIN
+  ════════════════════════════════════════ -->
+  <div id="view-login" class="preview-frame">
+    <div class="login-frame">
+      <!-- Círculos decorativos de fundo -->
+      <div class="login-bg-circle" style="width:400px;height:400px;top:-100px;right:-100px;"></div>
+      <div class="login-bg-circle" style="width:300px;height:300px;bottom:-80px;left:-80px;"></div>
+
+      <div class="login-card">
+        <div class="login-logo-mark">EE</div>
+        <div class="login-title">Área Administrativa</div>
+        <div class="login-sub">Quadro de Avisos · EENSA</div>
+
+        <div class="form-group" style="text-align:left;">
+          <label class="form-label">E-mail institucional</label>
+          <input class="form-input" type="email" value="admin@eensa.edu.br" placeholder="seu@eensa.edu.br"/>
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label class="form-label">Senha</label>
+          <input class="form-input" type="password" value="••••••••••••" placeholder="Sua senha"/>
+        </div>
+
+        <div class="login-hint">
+          🔐 <strong>Demo:</strong> admin@eensa.edu.br<br/>
+          Apenas usuários cadastrados no Supabase Auth têm acesso.
+        </div>
+
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:14px;" onclick="showToast('✅ Login realizado! Redirecionando...', 'success'); setTimeout(()=>switchView('admin'), 1200);">
+          Entrar na gestão
+        </button>
+
+        <div style="margin-top:16px;font-size:12px;color:var(--text3);">
+          Problemas com acesso? Contate a secretaria.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       VIEW 4 — MODO TV
+  ════════════════════════════════════════ -->
+  <div id="view-tv" class="preview-frame tv-frame">
+
+    <!-- Clock bar -->
+    <div class="tv-clock-bar">
+      <span id="tv-date" style="text-transform:capitalize;"></span>
+      <span class="tv-clock-time" id="tv-time"></span>
+    </div>
+
+    <!-- Logo bar -->
+    <div class="tv-logo-bar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="tv-logo-mark">EE</div>
+        <div>
+          <div class="tv-brand-name">EENSA</div>
+          <div class="tv-brand-sub">Construindo Histórias...</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="urgente-banner" style="margin:0;padding:8px 16px;font-size:13px;">
+          <span class="urgente-banner-dot"></span>
+          2 avisos urgentes
+        </div>
+        <div class="rt-pill"><span class="rt-dot"></span>Ao vivo</div>
+      </div>
+    </div>
+
+    <div class="tv-page tv">
+
+      <!-- URGENTES -->
+      <div class="avisos-section">
+        <div class="section-divider">
+          <span class="section-divider-label" style="font-size:13px;">🔴 Urgentes</span>
+          <div class="section-divider-line"></div>
+        </div>
+
+        <div class="aviso-card urgente" style="animation-delay:.05s">
+          <div class="aviso-badges">
+            <span class="badge badge-urgente">🔴 Urgente</span>
+            <span class="chip">Reunião</span>
+          </div>
+          <div class="aviso-titulo urgente-txt">Reunião de Pais — Presença Obrigatória</div>
+          <div class="aviso-body" style="margin-top:10px;">
+            Reunião obrigatória com os pais dos alunos do 9º ano na <strong style="color:#8A3208;">sexta-feira, 22/03, às 18h</strong> no auditório. Presença indispensável.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Direção</span>
+            <span class="meta-item expira-hoje">⏰ Expira hoje</span>
+          </div>
+        </div>
+
+        <div class="aviso-card urgente" style="animation-delay:.12s">
+          <div class="aviso-badges">
+            <span class="badge badge-urgente">🔴 Urgente</span>
+            <span class="chip">Avaliações</span>
+          </div>
+          <div class="aviso-titulo urgente-txt">Avaliações do 1º Bimestre — 25 a 29/03</div>
+          <div class="aviso-body" style="margin-top:10px;">
+            As avaliações iniciam em <strong style="color:#8A3208;">25 de março</strong>. Consulte o cronograma na secretaria. Não haverá segunda chamada sem justificativa.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Coordenação Pedagógica</span>
+            <span class="meta-item expira-breve">⚡ Expira em 2 dias</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMUNICADOS -->
+      <div class="avisos-section">
+        <div class="section-divider">
+          <span class="section-divider-label" style="font-size:13px;">🔵 Comunicados</span>
+          <div class="section-divider-line"></div>
+        </div>
+
+        <div class="aviso-card normal" style="animation-delay:.2s">
+          <div class="aviso-badges">
+            <span class="badge badge-normal">🔵 Normal</span>
+            <span class="chip">Esportes</span>
+          </div>
+          <div class="aviso-titulo">Campeonato Interturmas de Futsal — Inscrições Abertas</div>
+          <div class="aviso-body" style="margin-top:10px;">
+            Inscrições até <strong style="color:var(--green)">20 de março</strong> na sala de Educação Física com o Prof. Carlos. Máximo 10 jogadores por turma.
+          </div>
+          <div class="aviso-meta">
+            <span class="meta-item">👤 Prof. Carlos</span>
+            <span class="meta-item expira-normal">📅 Até 20/03/2025</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="tv-back-btn" onclick="switchView('public')">← Sair do Modo TV</button>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       VIEW 5 — MODAL NOVO AVISO
+  ════════════════════════════════════════ -->
+  <div id="view-modal" class="preview-frame" style="background:rgba(26,58,34,.28);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;min-height:calc(100vh - 52px);">
+
+    <!-- fundo clicável -->
+    <div style="position:absolute;inset:0;" onclick="switchView('admin')"></div>
+
+    <div class="modal" style="position:relative;z-index:1;">
+      <div class="modal-header">
+        <span class="modal-title">✨ Novo aviso</span>
+        <button class="modal-close" onclick="switchView('admin')">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Título</label>
+        <input class="form-input" type="text" value="Feira de Ciências — Inscrições Abertas" placeholder="Título claro e objetivo"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mensagem</label>
+        <textarea class="form-textarea">As inscrições para a Feira de Ciências 2025 estão abertas! Os projetos devem ser entregues até o dia 10 de abril. Formulários disponíveis na coordenação pedagógica.</textarea>
+        <div class="char-count">142 / 2000 caracteres</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Prioridade</label>
+        <div class="priority-buttons">
+          <button class="priority-btn sel-urgente" onclick="selectPriority(this,'urgente')">🔴<br/>Urgente</button>
+          <button class="priority-btn" onclick="selectPriority(this,'normal')">🔵<br/>Normal</button>
+          <button class="priority-btn" onclick="selectPriority(this,'info')">🟡<br/>Informativo</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Categoria</label>
+          <select class="form-select">
+            <option>Evento</option>
+            <option>Geral</option>
+            <option>Reunião</option>
+            <option>Avaliações</option>
+            <option>Esportes</option>
+            <option>Cultura</option>
+            <option>Regra</option>
+            <option>Informativo</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Publicado por</label>
+          <input class="form-input" type="text" value="Coordenação Pedagógica" placeholder="Nome ou setor"/>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:17px;">
+        <label class="form-label">Expira em</label>
+        <input class="form-input" type="datetime-local" value="2025-04-10T18:00"/>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="switchView('admin')">Cancelar</button>
+        <button class="btn btn-primary" style="padding:9px 20px;" onclick="showToast('✅ Aviso publicado com sucesso!', 'success'); switchView('admin');">
+          ✅ Publicar aviso
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /preview-shell -->
+
+<!-- TOAST (global) -->
+<div id="toast-el" class="toast" style="display:none;"></div>
+
+<script>
+// ─── NAVEGAÇÃO ENTRE VIEWS ──────────────────
+function switchView(name) {
+  document.querySelectorAll('.preview-frame').forEach(f => {
+    f.classList.remove('active');
+    f.style.display = 'none';
+  });
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+  const frame = document.getElementById('view-' + name);
+  const tab   = document.querySelector(`[data-view="${name}"]`);
+
+  if (name === 'modal') {
+    frame.style.display = 'flex';
+    frame.classList.add('active');
+  } else {
+    frame.style.display = 'block';
+    frame.classList.add('active');
+  }
+  if (tab) tab.classList.add('active');
+
+  // Scroll to top
+  frame.scrollTop = 0;
+}
+
+// ─── ADMIN TABS ─────────────────────────────
+function showAdminTab(tab) {
+  document.getElementById('admin-ativos').style.display    = tab === 'ativos'    ? 'block' : 'none';
+  document.getElementById('admin-expirados').style.display = tab === 'expirados' ? 'block' : 'none';
+  document.getElementById('tab-ativos').classList.toggle('active', tab === 'ativos');
+  document.getElementById('tab-expirados').classList.toggle('active', tab === 'expirados');
+}
+
+// ─── PRIORITY BUTTONS ───────────────────────
+function selectPriority(btn, type) {
+  document.querySelectorAll('.priority-btn').forEach(b => {
+    b.classList.remove('sel-urgente', 'sel-normal', 'sel-info');
+  });
+  btn.classList.add('sel-' + type);
+}
+
+// ─── TOAST ──────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type = 'success') {
+  const el = document.getElementById('toast-el');
+  el.textContent = msg;
+  el.className = `toast ${type}`;
+  el.style.display = 'flex';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+// ─── RELÓGIO TV ──────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const dateEl = document.getElementById('tv-date');
+  const timeEl = document.getElementById('tv-time');
+  if (dateEl) {
+    dateEl.textContent = now.toLocaleDateString('pt-BR', {
+      weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+    });
+  }
+  if (timeEl) {
+    timeEl.textContent = now.toLocaleTimeString('pt-BR', {
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+  }
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ─── MODAL — inicializar display correto ─────
+document.getElementById('view-modal').style.display = 'none';
+</script>
+</body>
+</html>

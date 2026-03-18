@@ -1,0 +1,120 @@
+/* app/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg:           #F3F8F0;
+  --surface:      #FFFFFF;
+  --surface2:     #EBF4E6;
+  --surface3:     #E0F0E6;
+  --green:        #1A6B2E;
+  --green-mid:    #2D8A47;
+  --green-lt:     #A8D8B4;
+  --green-xlt:    #D4EADB;
+  --teal:         #2BAAC7;
+  --teal-lt:      #C4EAF4;
+  --teal-border:  #9ED8EC;
+  --orange:       #F28C30;
+  --orange-lt:    #FDECD8;
+  --orange-border:#F5C9A0;
+  --yellow:       #F5C840;
+  --yellow-lt:    #FEF7DC;
+  --yellow-border:#F0DA90;
+  --red:          #E05530;
+  --red-lt:       #FBEDE8;
+  --text:         #1A3A22;
+  --text2:        #4A7A5A;
+  --text3:        #7DAA8A;
+  --border:       #D4EADB;
+  --r-sm:  8px;
+  --r-md:  14px;
+  --r-lg:  20px;
+  --sh-sm: 0 2px 8px rgba(26,107,46,.07);
+  --sh-md: 0 4px 20px rgba(26,107,46,.11);
+  --sh-lg: 0 8px 40px rgba(26,107,46,.16);
+}
+
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+html { 
+  scroll-behavior: smooth; 
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Nunito', sans-serif;
+  color: var(--text);
+}
+
+/* Animações globais */
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(6px) } 
+  to { opacity: 1; transform: translateY(0) } 
+}
+@keyframes slideDown { 
+  from { transform: translateY(-100%); opacity: 0 } 
+  to { transform: translateY(0); opacity: 1 } 
+}
+@keyframes slideUp { 
+  from { transform: translateY(16px); opacity: 0 } 
+  to { transform: translateY(0); opacity: 1 } 
+}
+@keyframes cardIn {
+  from { transform: translateY(12px); opacity: 0 }
+  to { transform: translateY(0); opacity: 1 }
+}
+@keyframes modalUp {
+  from { transform: translateY(24px) scale(.97); opacity: 0 }
+  to { transform: translateY(0) scale(1); opacity: 1 }
+}
+@keyframes fadeOverlay { 
+  from { opacity: 0 } 
+  to { opacity: 1 } 
+}
+@keyframes toastIn {
+  from { transform: translateX(60px); opacity: 0 }
+  to { transform: translateX(0); opacity: 1 }
+}
+@keyframes pulse { 
+  0%, 100% { opacity: 1 } 
+  50% { opacity: 0.6 } 
+}
+@keyframes pulseBar {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(242,140,48,.0) }
+  50% { box-shadow: 0 0 0 6px rgba(242,140,48,.08) }
+}
+@keyframes blink { 
+  0%, 100% { opacity: 1 } 
+  50% { opacity: .3 } 
+}
+@keyframes shimmer { 
+  0% { background-position: 200% } 
+  100% { background-position: -200% } 
+}
+
+.animate-fade-in { animation: fadeIn .4s ease; }
+.animate-slide-down { animation: slideDown .35s ease; }
+.animate-slide-up { animation: slideUp .25s ease; }
+.animate-card-in { animation: cardIn .35s ease both; }
+.animate-modal-up { animation: modalUp .25s cubic-bezier(.34,1.56,.64,1); }
+.animate-pulse-soft { animation: pulse 2s ease-in-out infinite; }
+
+/* Scrollbar discreta */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--green-lt); border-radius: 3px; }
