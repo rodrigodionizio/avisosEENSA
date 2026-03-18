@@ -21,11 +21,11 @@ export function TVCard({ aviso }: TVCardProps) {
     minute: '2-digit',
   });
 
-  // Cores baseadas na prioridade
+  // Cores baseadas na prioridade (usando CSS variables do globals.css)
   const priorityStyles = {
-    urgente: 'border-red bg-red-lt',
-    normal: 'border-teal bg-teal-lt',
-    info: 'border-yellow bg-yellow-lt',
+    urgente: { border: 'var(--red)', bg: 'var(--red-lt)' },
+    normal: { border: 'var(--teal)', bg: 'var(--teal-lt)' },
+    info: { border: 'var(--orange)', bg: 'var(--orange-lt)' },
   };
 
   const priorityLabels = {
@@ -35,43 +35,51 @@ export function TVCard({ aviso }: TVCardProps) {
   };
 
   const priorityColors = {
-    urgente: 'text-red',
-    normal: 'text-teal',
-    info: 'text-yellow-700',
+    urgente: { text: 'var(--red)', bg: 'var(--red-lt)' },
+    normal: { text: 'var(--teal)', bg: 'var(--teal-lt)' },
+    info: { text: 'var(--orange)', bg: 'var(--orange-lt)' },
   };
 
   return (
     <div 
-      className={`rounded-2xl border-l-8 ${priorityStyles[aviso.prioridade]} p-8 shadow-md transition-all hover:shadow-lg`}
-      style={{ zIndex: TV_CONFIG.zIndex.cards }}
+      className="rounded-2xl p-10 shadow-lg transition-all hover:shadow-xl"
+      style={{ 
+        zIndex: TV_CONFIG.zIndex.cards,
+        borderLeft: `10px solid ${priorityStyles[aviso.prioridade].border}`,
+        backgroundColor: priorityStyles[aviso.prioridade].bg
+      }}
     >
       {/* Cabeçalho */}
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <h3 className={`${TV_CONFIG.typography.cards.title} leading-tight flex-1`}>
+      <div className="flex items-start justify-between gap-4 mb-5">
+        <h3 className="text-3xl font-bold leading-tight flex-1" style={{ color: 'var(--text)' }}>
           {aviso.titulo}
         </h3>
         <span 
-          className={`px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide ${priorityColors[aviso.prioridade]} bg-white/80`}
+          className="px-5 py-2 rounded-full text-base font-bold uppercase tracking-wide whitespace-nowrap shadow-md"
+          style={{ 
+            color: priorityColors[aviso.prioridade].text,
+            backgroundColor: 'rgba(255,255,255,0.9)'
+          }}
         >
           {priorityLabels[aviso.prioridade]}
         </span>
       </div>
 
       {/* Descrição */}
-      <p className={`${TV_CONFIG.typography.cards.description} text-text2 leading-relaxed mb-6`}>
+      <p className="text-xl leading-relaxed mb-6 font-medium" style={{ color: 'var(--text2)' }}>
         {aviso.corpo}
       </p>
 
       {/* Footer */}
-      <div className="flex items-center gap-6 text-text3">
+      <div className="flex items-center gap-6" style={{ color: 'var(--text3)' }}>
         <div className="flex items-center gap-2">
-          <ClockIcon className="w-5 h-5" />
-          <span className={TV_CONFIG.typography.cards.meta}>{dataFormatada}</span>
+          <ClockIcon className="w-6 h-6" />
+          <span className="text-lg font-semibold">{dataFormatada}</span>
         </div>
         {aviso.autor && (
           <div className="flex items-center gap-2">
-            <UserIcon className="w-5 h-5" />
-            <span className={TV_CONFIG.typography.cards.meta}>{aviso.autor}</span>
+            <UserIcon className="w-6 h-6" />
+            <span className="text-lg font-semibold">{aviso.autor}</span>
           </div>
         )}
       </div>

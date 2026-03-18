@@ -26,12 +26,16 @@ export function TVScrollArea({ avisos }: TVScrollAreaProps) {
     <div className="relative flex-1 overflow-hidden">
       {/* Header Sticky - Zona 3 */}
       <div 
-        className={`sticky top-0 ${TV_CONFIG.colors.backdropBlur} bg-white/80 border-b-2 border-green/20 px-8 py-6`}
-        style={{ zIndex: TV_CONFIG.zIndex.header }}
+        className="sticky top-0 backdrop-blur-md px-8 py-7"
+        style={{ 
+          zIndex: TV_CONFIG.zIndex.header,
+          backgroundColor: 'rgba(255,255,255,0.85)',
+          borderBottom: '3px solid var(--green-lt)'
+        }}
       >
-        <div className="max-w-[2000px] mx-auto flex items-center gap-3">
-          <ListIcon className="w-7 h-7 text-green" />
-          <h2 className={`${TV_CONFIG.typography.header.title} font-bold text-green`}>
+        <div className="max-w-[2000px] mx-auto flex items-center gap-4">
+          <ListIcon className="w-8 h-8" style={{ color: 'var(--green)' }} />
+          <h2 className="text-3xl font-black" style={{ color: 'var(--green)' }}>
             Comunicados & Informativos
           </h2>
         </div>

@@ -32,32 +32,35 @@ export function TVTopBar() {
 
   return (
     <div 
-      className="fixed top-0 left-0 right-0 bg-gradient-to-r from-green via-green-mid to-green text-white shadow-lg"
-      style={{ zIndex: TV_CONFIG.zIndex.topBar }}
+      className="fixed top-0 left-0 right-0 text-white shadow-2xl"
+      style={{ 
+        zIndex: TV_CONFIG.zIndex.topBar,
+        background: 'linear-gradient(to right, var(--green), var(--green-mid), var(--green))'
+      }}
     >
-      <div className="max-w-[2000px] mx-auto px-8 py-4 flex items-center justify-between gap-6">
+      <div className="max-w-[2000px] mx-auto px-8 py-5 flex items-center justify-between gap-6">
         {/* Logo */}
         <div className="flex-shrink-0">
-          <EensaLogo variant="alt" className="h-12 w-auto text-white" />
+          <EensaLogo variant="alt" className="h-14 w-auto text-white" />
         </div>
 
         {/* Data */}
-        <div className={`flex-shrink-0 ${TV_CONFIG.typography.topBar.date} font-medium`}>
+        <div className="flex-shrink-0 text-2xl font-semibold">
           {dateCapitalized}
         </div>
 
         {/* Relógio */}
-        <div className={`flex-shrink-0 ${TV_CONFIG.typography.topBar.clock} font-bold tabular-nums`}>
+        <div className="flex-shrink-0 text-3xl font-black tabular-nums">
           {timeFormatted}
         </div>
 
         {/* Indicador AO VIVO */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-3 flex-shrink-0">
           <div 
-            className="w-3 h-3 rounded-full bg-red-500"
+            className="w-4 h-4 rounded-full bg-red-500"
             style={{ animation: 'blink 1.5s ease-in-out infinite' }}
           />
-          <span className={`${TV_CONFIG.typography.topBar.date} font-bold uppercase tracking-wide`}>
+          <span className="text-xl font-black uppercase tracking-wider">
             Ao Vivo
           </span>
         </div>
