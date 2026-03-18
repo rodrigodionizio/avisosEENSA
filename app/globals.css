@@ -78,6 +78,10 @@ h1, h2, h3, h4, h5, h6 {
   from { transform: translateY(12px); opacity: 0 }
   to { transform: translateY(0); opacity: 1 }
 }
+@keyframes blink {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0.3 }
+}
 @keyframes modalUp {
   from { transform: translateY(24px) scale(.97); opacity: 0 }
   to { transform: translateY(0) scale(1); opacity: 1 }
