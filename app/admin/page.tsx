@@ -18,7 +18,7 @@ import type { Aviso, AvisoFormData, StatsData } from '@/types';
 
 export default function AdminPage() {
   const router = useRouter();
-  const { logado, loading: authLoading } = useAuth();
+  const { logado, loading: authLoading, usuario, getNome } = useAuth();
   const [avisos, setAvisos] = useState<Aviso[]>([]);
   const [avisosAtivos, setAvisosAtivos] = useState<Aviso[]>([]);
   const [avisosExpirados, setAvisosExpirados] = useState<Aviso[]>([]);
@@ -124,7 +124,21 @@ export default function AdminPage() {
               Painel de Gestão
             </h1>
             <p className="text-[13px] text-eensa-text3 mt-[3px]">
-              Bem-vinda, <strong className="text-eensa-green">admin@eensa.edu.br</strong>
+              {usuario?.user_metadata?.nome ? (
+                <>
+                  Bem-vindo(a), <strong className="text-eensa-green">{usuario.user_metadata.nome}</strong>
+                </>
+              ) : usuario?.user_metadata?.display_name ? (
+                <>
+                  Bem-vindo(a), <strong className="text-eensa-green">{usuario.user_metadata.display_name}</strong>
+                </>
+              ) : usuario?.email ? (
+                <>
+                  Bem-vindo(a), <strong className="text-eensa-green">{usuario.email}</strong>
+                </>
+              ) : (
+                'Bem-vindo(a) ao painel de gestão'
+              )}
             </p>
           </div>
           <ButtonNew onClick={handleNovo}>
