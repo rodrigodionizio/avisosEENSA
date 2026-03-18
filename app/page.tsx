@@ -2,6 +2,7 @@
 'use client';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { AvisoList } from '@/components/avisos/AvisoList';
 import { ButtonTV } from '@/components/ui/Button';
@@ -74,6 +75,7 @@ export default function HomePage() {
           />
         )}
       </PageWrapper>
+      <Footer />
     </>
   );
 }

@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'EENSA — Quadro de Avisos',
-  description: 'Quadro de avisos digital da Escola Estadual Nilo Santos de Araújo',
+  description: 'Quadro de avisos digital da Escola Estadual Nossa Senhora Aparecida (E.E.N.S.A) - Mendes Pimentel/MG. Construindo Histórias...',
   manifest: '/manifest.json',
   appleWebApp: { 
     capable: true, 

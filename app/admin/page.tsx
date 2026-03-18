@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { StatsRow } from '@/components/admin/StatsRow';
 import { AvisosTable } from '@/components/admin/AvisosTable';
@@ -199,6 +200,7 @@ export default function AdminPage() {
           onClose={() => setToast(null)}
         />
       )}
+      <Footer />
     </>
   );
 }

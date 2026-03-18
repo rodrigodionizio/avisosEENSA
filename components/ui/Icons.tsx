@@ -140,4 +140,27 @@ export const Icons = {
       <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
+
+  // Localização e Social
+  MapPin: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M8 14C8 14 13 10 13 6.5C13 3.46243 10.5376 1 7.5 1C4.46243 1 2 3.46243 2 6.5C2 10 8 14 8 14Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <circle cx="7.5" cy="6.5" r="1.5" fill="currentColor" />
+    </svg>
+  ),
+
+  Instagram: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <rect x="2" y="2" width="12" height="12" rx="3" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="11.5" cy="4.5" r="0.75" fill="currentColor" />
+    </svg>
+  ),
+
+  BookOpen: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M2 3.5C2 3.5 4 2 8 2C12 2 14 3.5 14 3.5V12C14 12 12 10.5 8 10.5C4 10.5 2 12 2 12V3.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M8 2V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
 };
