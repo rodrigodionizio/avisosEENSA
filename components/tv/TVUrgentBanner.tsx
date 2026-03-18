@@ -58,11 +58,11 @@ export function TVUrgentBanner({ urgentes }: TVUrgentBannerProps) {
 
   return (
     <div 
-      className="py-6"
+      className="py-4"
       style={{ 
         zIndex: TV_CONFIG.zIndex.urgents,
-        background: 'linear-gradient(to bottom, var(--red-lt), #ffffff)',
-        borderBottom: '4px solid var(--red)'
+        background: 'linear-gradient(to bottom, #FBEDE8, #ffffff)',
+        borderBottom: '3px solid #F5968F'
       }}
     >
       <div className="max-w-[2000px] mx-auto px-8">
@@ -84,15 +84,15 @@ export function TVUrgentBanner({ urgentes }: TVUrgentBannerProps) {
 
             {/* Indicadores de posição (dots) */}
             {TV_CONFIG.carousel.showDots && urgentes.length > 1 && (
-              <div className="flex justify-center gap-3 mt-7">
+              <div className="flex justify-center gap-2 mt-4">
                 {urgentes.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className="h-4 rounded-full transition-all shadow-md"
+                    className="h-2.5 rounded-full transition-all"
                     style={{
-                      width: index === currentIndex ? '32px' : '16px',
-                      backgroundColor: index === currentIndex ? 'var(--red)' : 'rgba(224, 85, 48, 0.3)'
+                      width: index === currentIndex ? '24px' : '10px',
+                      backgroundColor: index === currentIndex ? '#F5968F' : 'rgba(245, 150, 143, 0.3)'
                     }}
                     aria-label={`Ir para urgente ${index + 1}`}
                   />

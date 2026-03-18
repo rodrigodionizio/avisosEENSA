@@ -22,32 +22,32 @@ export function TVUrgentCard({ aviso }: TVUrgentCardProps) {
 
   return (
     <div 
-      className="text-white rounded-2xl p-7 shadow-2xl h-full flex flex-col justify-between min-h-[200px]"
+      className="text-white rounded-xl p-5 shadow-lg h-full flex flex-col justify-between min-h-[160px]"
       style={{
-        background: 'linear-gradient(135deg, var(--red) 0%, #C84525 100%)'
+        background: 'linear-gradient(135deg, #F5968F 0%, #F28C83 100%)'
       }}
     >
       {/* Cabeçalho */}
-      <div className="flex items-start justify-between gap-4 mb-3">
+      <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex-1">
-          <div className="inline-block px-4 py-1.5 bg-white/25 backdrop-blur-sm rounded-full text-sm font-black uppercase tracking-wider mb-3 shadow-lg">
+          <div className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-wide mb-2 shadow">
             🚨 Urgente
           </div>
-          <h3 className="text-3xl font-black leading-tight">
+          <h3 className="text-2xl font-bold leading-tight">
             {aviso.titulo}
           </h3>
         </div>
       </div>
 
       {/* Descrição */}
-      <p className="text-xl leading-relaxed mb-3 line-clamp-2 font-medium">
+      <p className="text-lg leading-snug mb-2 line-clamp-2 font-medium">
         {aviso.corpo}
       </p>
 
       {/* Footer */}
-      <div className="flex items-center gap-3 text-white/90">
-        <ClockIcon className="w-6 h-6" />
-        <span className="text-lg font-semibold">{dataFormatada}</span>
+      <div className="flex items-center gap-2 text-white/90">
+        <ClockIcon className="w-4 h-4" />
+        <span className="text-sm font-medium">{dataFormatada}</span>
       </div>
     </div>
   );
