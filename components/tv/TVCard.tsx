@@ -42,20 +42,20 @@ export function TVCard({ aviso }: TVCardProps) {
 
   return (
     <div 
-      className="rounded-2xl p-10 shadow-lg transition-all hover:shadow-xl"
+      className="rounded-2xl p-8 shadow-lg transition-all hover:shadow-xl"
       style={{ 
         zIndex: TV_CONFIG.zIndex.cards,
-        borderLeft: `10px solid ${priorityStyles[aviso.prioridade].border}`,
+        borderLeft: `8px solid ${priorityStyles[aviso.prioridade].border}`,
         backgroundColor: priorityStyles[aviso.prioridade].bg
       }}
     >
       {/* Cabeçalho */}
-      <div className="flex items-start justify-between gap-4 mb-5">
-        <h3 className="text-3xl font-bold leading-tight flex-1" style={{ color: 'var(--text)' }}>
+      <div className="flex items-start justify-between gap-4 mb-4">
+        <h3 className="text-2xl font-bold leading-tight flex-1" style={{ color: 'var(--text)' }}>
           {aviso.titulo}
         </h3>
         <span 
-          className="px-5 py-2 rounded-full text-base font-bold uppercase tracking-wide whitespace-nowrap shadow-md"
+          className="px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide whitespace-nowrap shadow-md"
           style={{ 
             color: priorityColors[aviso.prioridade].text,
             backgroundColor: 'rgba(255,255,255,0.9)'
@@ -66,20 +66,20 @@ export function TVCard({ aviso }: TVCardProps) {
       </div>
 
       {/* Descrição */}
-      <p className="text-xl leading-relaxed mb-6 font-medium" style={{ color: 'var(--text2)' }}>
+      <p className="text-lg leading-relaxed mb-5 font-medium" style={{ color: 'var(--text2)' }}>
         {aviso.corpo}
       </p>
 
       {/* Footer */}
       <div className="flex items-center gap-6" style={{ color: 'var(--text3)' }}>
         <div className="flex items-center gap-2">
-          <ClockIcon className="w-6 h-6" />
-          <span className="text-lg font-semibold">{dataFormatada}</span>
+          <ClockIcon className="w-5 h-5" />
+          <span className="text-base font-semibold">{dataFormatada}</span>
         </div>
         {aviso.autor && (
           <div className="flex items-center gap-2">
-            <UserIcon className="w-6 h-6" />
-            <span className="text-lg font-semibold">{aviso.autor}</span>
+            <UserIcon className="w-5 h-5" />
+            <span className="text-base font-semibold">{aviso.autor}</span>
           </div>
         )}
       </div>

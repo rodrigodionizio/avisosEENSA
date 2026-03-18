@@ -26,16 +26,16 @@ export function TVScrollArea({ avisos }: TVScrollAreaProps) {
     <div className="relative flex-1 overflow-hidden">
       {/* Header Sticky - Zona 3 */}
       <div 
-        className="sticky top-0 backdrop-blur-md px-8 py-7"
+        className="sticky top-0 backdrop-blur-md px-8 py-5"
         style={{ 
           zIndex: TV_CONFIG.zIndex.header,
           backgroundColor: 'rgba(255,255,255,0.85)',
           borderBottom: '3px solid var(--green-lt)'
         }}
       >
-        <div className="max-w-[2000px] mx-auto flex items-center gap-4">
-          <ListIcon className="w-8 h-8" style={{ color: 'var(--green)' }} />
-          <h2 className="text-3xl font-black" style={{ color: 'var(--green)' }}>
+        <div className="max-w-[2000px] mx-auto flex items-center gap-3">
+          <ListIcon className="w-7 h-7" style={{ color: 'var(--green)' }} />
+          <h2 className="text-2xl font-black" style={{ color: 'var(--green)' }}>
             Comunicados & Informativos
           </h2>
         </div>
@@ -57,7 +57,7 @@ export function TVScrollArea({ avisos }: TVScrollAreaProps) {
           }
         `}</style>
 
-        <div className="max-w-[2000px] mx-auto px-8 py-8 space-y-6">
+        <div className="max-w-[2000px] mx-auto px-8 py-6 space-y-4">
           {avisosExtended.length === 0 ? (
             <div className="text-center py-20 text-text3">
               <p className="text-2xl">Nenhum comunicado disponível no momento.</p>
@@ -70,7 +70,7 @@ export function TVScrollArea({ avisos }: TVScrollAreaProps) {
         </div>
 
         {/* Espaçamento extra para garantir scroll infinito */}
-        <div className="h-32" />
+        <div className="h-24" />
       </div>
 
       {/* Fade Bottom - Gradiente de fade para suavizar transição */}

@@ -41,7 +41,7 @@ export default function TVPage() {
       <TVTopBar />
 
       {/* Espaçamento para TopBar fixa */}
-      <div className="h-20" />
+      <div className="h-16" />
 
       {/* Zona 2: Banner de Urgentes (z-5) - Condicional */}
       {urgentes.length > 0 && <TVUrgentBanner urgentes={urgentes} />}

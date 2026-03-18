@@ -58,7 +58,7 @@ export function TVUrgentBanner({ urgentes }: TVUrgentBannerProps) {
 
   return (
     <div 
-      className="py-10"
+      className="py-6"
       style={{ 
         zIndex: TV_CONFIG.zIndex.urgents,
         background: 'linear-gradient(to bottom, var(--red-lt), #ffffff)',
