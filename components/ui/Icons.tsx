@@ -105,6 +105,13 @@ export const Icons = {
     </svg>
   ),
 
+  Settings: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 2V3.5M8 12.5V14M14 8H12.5M3.5 8H2M12.5 12.5L11.5 11.5M4.5 4.5L3.5 3.5M12.5 3.5L11.5 4.5M4.5 11.5L3.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+
   // Status
   Check: ({ className = '', size = 16 }: IconProps) => (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
