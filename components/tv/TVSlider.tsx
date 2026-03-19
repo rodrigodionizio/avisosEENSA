@@ -1,6 +1,7 @@
 // components/tv/TVSlider.tsx
 'use client';
 import { useState, useEffect } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Aviso } from '@/types';
 import { Icons } from '@/components/ui/Icons';
 import { formatDataHora } from '@/lib/utils';
@@ -50,6 +51,10 @@ export function TVSlider({ avisos }: TVSliderProps) {
   }
 
   const aviso = avisos[currentIndex];
+  
+  // URL para o QR Code
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const avisoUrl = `${baseUrl}/aviso/${aviso.id}`;
 
   // Estilos por prioridade (identidade visual original)
   const bgGradient = {
@@ -138,6 +143,24 @@ export function TVSlider({ avisos }: TVSliderProps) {
             <span className="flex items-center gap-3">
               <Icons.Clock size={24} className="opacity-70" /> {formatDataHora(aviso.criado_em)}
             </span>
+          </div>
+          
+          {/* QR Code discreto no canto inferior direito */}
+          <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-sm rounded-xl 
+                          shadow-lg p-3 border border-eensa-border/60 flex flex-col items-center gap-2">
+            <QRCodeSVG 
+              value={avisoUrl}
+              size={90}
+              level="M"
+              includeMargin={false}
+              fgColor="#1A6B2E"
+              bgColor="#FFFFFF"
+            />
+            <div className="text-center">
+              <p className="text-[10px] font-bold text-eensa-green uppercase tracking-wide">
+                📱 Ver no Celular
+              </p>
+            </div>
           </div>
         </div>
       </div>

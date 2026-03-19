@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  trailingSlash: true,
+  // Removido output: 'export' para permitir rotas dinâmicas (/aviso/[id])
+  trailingSlash: false,
   images: { unoptimized: true },
 };
 

@@ -1,4 +1,6 @@
 // components/avisos/AvisoCard.tsx
+'use client';
+import { useState } from 'react';
 import type { Aviso } from '@/types';
 import { Badge, Chip } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -13,8 +15,23 @@ interface AvisoCardProps {
 }
 
 export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCardProps) {
+  const [linkCopiado, setLinkCopiado] = useState(false);
+  
   const config = prioridadeConfig[aviso.prioridade];
   const dias = diasRestantes(aviso.expira_em);
+
+  const copiarLink = async () => {
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const url = `${baseUrl}/aviso/${aviso.id}`;
+    
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopiado(true);
+      setTimeout(() => setLinkCopiado(false), 2000);
+    } catch (err) {
+      console.error('Erro ao copiar link:', err);
+    }
+  };
 
   // Estilo de expiração
   let expiraStyle = 'expira-normal text-eensa-text3';
@@ -125,6 +142,31 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
           </div>
         )}
       </div>
+      
+      {/* Botão discreto de compartilhar link */}
+      {!isAdmin && (
+        <div className="mt-3 pt-3 border-t border-eensa-border/40">
+          <button
+            onClick={copiarLink}
+            className="text-xs text-eensa-teal hover:text-eensa-teal-mid hover:underline 
+                       flex items-center gap-1.5 transition-colors group"
+          >
+            <svg 
+              width="12" 
+              height="12" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2"
+              className="group-hover:scale-110 transition-transform"
+            >
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+            <span>{linkCopiado ? '✓ Link copiado!' : 'Copiar link deste aviso'}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

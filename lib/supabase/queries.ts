@@ -96,3 +96,47 @@ export function subscribeToAvisos(callback: () => void) {
     }, callback)
     .subscribe();
 }
+
+// ============================================================================
+// FEATURE 1: LINKS PERMANENTES
+// ============================================================================
+
+/** 
+ * Retorna aviso específico por ID (para página /aviso/[id])
+ * Aceita avisos ativos OU inativos (link deve funcionar sempre)
+ */
+export async function getAvisoPorId(id: number): Promise<Aviso | null> {
+  console.log(`📥 getAvisoPorId(${id}) - Buscando aviso...`);
+  
+  const { data, error } = await sb
+    .from('avisos')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      // Not found - retorna null ao invés de throw
+      console.log(`❌ getAvisoPorId(${id}) - Aviso não encontrado`);
+      return null;
+    }
+    logSupabaseError('getAvisoPorId', error);
+    throw error;
+  }
+  
+  console.log(`✅ getAvisoPorId(${id}) - Aviso carregado: ${data.titulo}`);
+  return data as Aviso;
+}
+
+/**
+ * Retorna até 3 avisos ativos para sugestão (excluindo o aviso atual)
+ */
+export async function getOutrosAvisosAtivos(excludeId: number): Promise<Aviso[]> {
+  console.log(`📥 getOutrosAvisosAtivos(exclude=${excludeId}) - Buscando sugestões...`);
+  
+  const avisos = await getAvisosAtivos();
+  const outros = avisos.filter(a => a.id !== excludeId).slice(0, 3);
+  
+  console.log(`✅ getOutrosAvisosAtivos() - ${outros.length} avisos encontrados`);
+  return outros;
+}
