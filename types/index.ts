@@ -22,6 +22,7 @@ export interface Aviso {
   criado_em: string;        // ISO 8601
   expira_em: string | null; // ISO 8601 — null = não expira
   ativo: boolean;
+  slug: string;             // URL amigável (SEO slug)
 }
 
 export interface AvisoFormData {
@@ -31,6 +32,7 @@ export interface AvisoFormData {
   categoria: Categoria;
   autor: string;
   expira_em: string | null;
+  slug?: string;            // Opcional: gerado automaticamente se omitido
 }
 
 export interface AvisosGrouped {

@@ -5,7 +5,7 @@ import type { Aviso } from '@/types';
 import { Badge, Chip } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
-import { formatDataHora, diasRestantes, prioridadeConfig } from '@/lib/utils';
+import { formatDataHora, diasRestantes, prioridadeConfig, getAvisoUrl } from '@/lib/utils';
 
 interface AvisoCardProps {
   aviso: Aviso;
@@ -22,7 +22,7 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
 
   const copiarLink = async () => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const url = `${baseUrl}/aviso/${aviso.id}`;
+    const url = `${baseUrl}${getAvisoUrl(aviso)}`;
     
     try {
       await navigator.clipboard.writeText(url);

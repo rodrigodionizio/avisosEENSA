@@ -1,38 +1,40 @@
 // app/aviso/[id]/page.tsx
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
-import { getAvisoPorId, getOutrosAvisosAtivos } from '@/lib/supabase/queries';
+import { getAvisoBySlugOrId, getOutrosAvisosAtivos } from '@/lib/supabase/queries-server';
+import { getAvisoUrl } from '@/lib/utils';
 import { AvisoDetailCard } from '@/components/avisos/AvisoDetailCard';
 import { AvisoLinksList } from '@/components/avisos/AvisoLinksList';
 import { ShareButton } from '@/components/ui/ShareButton';
 import { EensaLogo } from '@/components/ui/Logo';
 
 interface AvisoPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function AvisoPage({ params }: AvisoPageProps) {
-  const avisoId = parseInt(params.id, 10);
+  const { id } = await params;
   
-  // Validar ID
-  if (isNaN(avisoId) || avisoId <= 0) {
-    notFound();
-  }
-  
-  // Buscar aviso
-  const aviso = await getAvisoPorId(avisoId);
+  // Buscar aviso por slug ou ID (suporta ambos)
+  const aviso = await getAvisoBySlugOrId(id);
   
   if (!aviso) {
     notFound();
   }
   
-  // Buscar outros avisos para sugestão
-  const outros = await getOutrosAvisosAtivos(avisoId);
+  // REDIRECT: Se acessado via ID numérico e tem slug, redirecionar para URL canônica
+  // Exemplo: /aviso/1 → /aviso/bem-vindos-ao-novo-quadro-de-avisos-digital
+  if (/^\d+$/.test(id) && aviso.slug) {
+    redirect(`/aviso/${aviso.slug}`);
+  }
   
-  // URL completa para compartilhamento
+  // Buscar outros avisos para sugestão
+  const outros = await getOutrosAvisosAtivos(aviso.id);
+  
+  // URL completa para compartilhamento (sempre com slug quando disponível)
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
                   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-  const avisoUrl = `${baseUrl}/aviso/${avisoId}`;
+  const avisoUrl = `${baseUrl}${getAvisoUrl(aviso)}`;
   
   return (
     <div className="min-h-screen bg-eensa-bg">
@@ -108,15 +110,10 @@ export default async function AvisoPage({ params }: AvisoPageProps) {
 
 // Metadata dinâmico para SEO e preview em redes sociais
 export async function generateMetadata({ params }: AvisoPageProps) {
-  const avisoId = parseInt(params.id, 10);
+  const { id } = await params;
   
-  if (isNaN(avisoId)) {
-    return {
-      title: 'Aviso não encontrado - EENSA',
-    };
-  }
-  
-  const aviso = await getAvisoPorId(avisoId);
+  // Buscar aviso por slug ou ID
+  const aviso = await getAvisoBySlugOrId(id);
   
   if (!aviso) {
     return {
@@ -128,15 +125,24 @@ export async function generateMetadata({ params }: AvisoPageProps) {
     ? aviso.corpo.substring(0, 157) + '...'
     : aviso.corpo;
   
+  // URL canônica sempre com slug (para SEO)
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+  const canonicalUrl = `${baseUrl}${getAvisoUrl(aviso)}`;
+  
   return {
     title: `${aviso.titulo} - EENSA`,
     description: descricao,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: aviso.titulo,
       description: aviso.corpo,
       type: 'article',
       siteName: 'EENSA - Avisos Escolares',
       locale: 'pt_BR',
+      url: canonicalUrl,
     },
     twitter: {
       card: 'summary',

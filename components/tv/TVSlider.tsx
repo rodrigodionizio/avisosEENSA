@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Aviso } from '@/types';
 import { Icons } from '@/components/ui/Icons';
-import { formatDataHora } from '@/lib/utils';
+import { formatDataHora, getAvisoUrl } from '@/lib/utils';
 import { useSettings } from '@/hooks/useSettings';
 
 interface TVSliderProps {
@@ -52,9 +52,9 @@ export function TVSlider({ avisos }: TVSliderProps) {
 
   const aviso = avisos[currentIndex];
   
-  // URL para o QR Code
+  // URL para o QR Code (sempre com slug quando disponível)
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const avisoUrl = `${baseUrl}/aviso/${aviso.id}`;
+  const avisoUrl = `${baseUrl}${getAvisoUrl(aviso)}`;
 
   // Estilos por prioridade (identidade visual original)
   const bgGradient = {

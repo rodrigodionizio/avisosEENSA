@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import type { Aviso } from '@/types';
 import { Badge } from '@/components/ui/Badge';
-import { prioridadeConfig } from '@/lib/utils';
+import { prioridadeConfig, getAvisoUrl } from '@/lib/utils';
 
 interface AvisoLinksListProps {
   avisos: Aviso[];
@@ -25,7 +25,7 @@ export function AvisoLinksList({ avisos, title = "💡 Outros Avisos Ativos" }: 
           return (
             <Link
               key={aviso.id}
-              href={`/aviso/${aviso.id}`}
+              href={getAvisoUrl(aviso)}
               className="block p-4 bg-white rounded-lg border border-blue-200 hover:border-blue-400 hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-start gap-3">
