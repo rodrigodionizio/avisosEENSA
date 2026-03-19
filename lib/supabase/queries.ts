@@ -17,8 +17,6 @@ function logSupabaseError(operation: string, error: any) {
 
 /** Retorna todos os avisos ativos, já publicados e não expirados, ordenados por prioridade */
 export async function getAvisosAtivos(): Promise<Aviso[]> {
-  console.log('📥 getAvisosAtivos() - Iniciando requisição...');
-  
   const now = new Date().toISOString();
   
   const { data, error } = await sb
@@ -33,8 +31,6 @@ export async function getAvisosAtivos(): Promise<Aviso[]> {
     logSupabaseError('getAvisosAtivos', error);
     throw error;
   }
-  
-  console.log(`✅ getAvisosAtivos() - ${data?.length || 0} avisos carregados`);
 
   // Reordenar: urgente → normal → info
   const ordem: Record<string, number> = { urgente: 0, normal: 1, info: 2 };
@@ -43,8 +39,6 @@ export async function getAvisosAtivos(): Promise<Aviso[]> {
 
 /** Retorna TODOS os avisos (para o painel admin) */
 export async function getTodosAvisos(): Promise<Aviso[]> {
-  console.log('📥 getTodosAvisos() - Iniciando requisição...');
-  
   const { data, error } = await sb
     .from('avisos')
     .select('*')
@@ -55,7 +49,6 @@ export async function getTodosAvisos(): Promise<Aviso[]> {
     throw error;
   }
   
-  console.log(`✅ getTodosAvisos() - ${data?.length || 0} avisos carregados`);
   return data as Aviso[];
 }
 

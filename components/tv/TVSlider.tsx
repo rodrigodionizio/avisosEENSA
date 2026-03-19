@@ -102,46 +102,46 @@ export function TVSlider({ avisos }: TVSliderProps) {
 
   return (
     <div className="flex-1 flex flex-col p-8 relative">
-      {/* Card do Aviso (GRANDE) */}
-      <div className="flex-1 flex items-center justify-center max-w-[1400px] mx-auto w-full">
+      {/* Card do Aviso (COMPACTO) */}
+      <div className="flex-1 flex items-center justify-center max-w-[1100px] mx-auto w-full">
         <div 
-          className={`relative ${bgGradient[aviso.prioridade]} rounded-2xl border-[3px] ${borderColor[aviso.prioridade]} p-12 shadow-2xl w-full transition-all duration-500 animate-fade-in overflow-hidden`}
-          style={{ minHeight: '500px' }}
+          className={`relative ${bgGradient[aviso.prioridade]} rounded-2xl border-[3px] ${borderColor[aviso.prioridade]} p-8 shadow-2xl w-full transition-all duration-500 animate-fade-in overflow-hidden`}
+          style={{ minHeight: '360px', maxHeight: '480px' }}
         >
           {/* Barra colorida esquerda */}
-          <div className={`absolute left-0 top-0 bottom-0 w-3 ${barGradient[aviso.prioridade]} rounded-l-2xl`} />
+          <div className={`absolute left-0 top-0 bottom-0 w-2.5 ${barGradient[aviso.prioridade]} rounded-l-2xl`} />
 
-          {/* Badges (versão TV - maior) */}
-          <div className="flex gap-3 flex-wrap items-center mb-6 ml-4">
+          {/* Badges (versão TV - compacta) */}
+          <div className="flex gap-2.5 flex-wrap items-center mb-4 ml-3">
             <span 
-              className={`inline-flex items-center gap-2 font-display font-bold text-lg px-5 py-2 rounded-full border ${badgeStyles[aviso.prioridade]}`}
+              className={`inline-flex items-center gap-1.5 font-display font-bold text-base px-4 py-1.5 rounded-full border ${badgeStyles[aviso.prioridade]}`}
             >
               {badgeIcons[aviso.prioridade]} {badgeLabels[aviso.prioridade]}
             </span>
-            <span className="inline-block bg-eensa-surface2 text-eensa-text2 rounded-full px-5 py-2 text-lg font-semibold border border-eensa-border font-display">
+            <span className="inline-block bg-eensa-surface2 text-eensa-text2 rounded-full px-4 py-1.5 text-base font-semibold border border-eensa-border font-display">
               {aviso.categoria}
             </span>
           </div>
 
           {/* Título */}
           <h2 
-            className={`font-display font-extrabold text-5xl leading-tight mb-6 ml-4 ${titleColor[aviso.prioridade]}`}
+            className={`font-display font-extrabold text-4xl leading-tight mb-4 ml-3 ${titleColor[aviso.prioridade]}`}
           >
             {aviso.titulo}
           </h2>
 
           {/* Corpo */}
-          <p className="text-eensa-text2 text-3xl leading-relaxed mb-8 ml-4">
+          <p className="text-eensa-text2 text-2xl leading-relaxed mb-5 ml-3">
             {aviso.corpo}
           </p>
 
           {/* Meta */}
-          <div className="flex items-center gap-8 text-xl text-eensa-text3 ml-4">
-            <span className="flex items-center gap-3">
-              <Icons.User size={24} className="opacity-70" /> {aviso.autor}
+          <div className="flex items-center gap-6 text-lg text-eensa-text3 ml-3">
+            <span className="flex items-center gap-2">
+              <Icons.User size={20} className="opacity-70" /> {aviso.autor}
             </span>
-            <span className="flex items-center gap-3">
-              <Icons.Clock size={24} className="opacity-70" /> {formatDataHora(aviso.criado_em)}
+            <span className="flex items-center gap-2">
+              <Icons.Clock size={20} className="opacity-70" /> {formatDataHora(aviso.criado_em)}
             </span>
           </div>
           

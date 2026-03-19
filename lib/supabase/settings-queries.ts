@@ -16,8 +16,6 @@ function logSupabaseError(operation: string, error: any) {
 
 /** Retorna as configurações do Modo TV */
 export async function getTVSettings(): Promise<TVSettings> {
-  console.log('📥 getTVSettings() - Buscando configurações...');
-  
   const { data, error } = await sb
     .from('tv_settings')
     .select('*')
@@ -27,7 +25,6 @@ export async function getTVSettings(): Promise<TVSettings> {
   if (error) {
     logSupabaseError('getTVSettings', error);
     // Retornar valores padrão em caso de erro
-    console.warn('⚠️ Usando configurações padrão');
     return {
       id: 1,
       timer_seconds: 20,
@@ -35,7 +32,6 @@ export async function getTVSettings(): Promise<TVSettings> {
     };
   }
   
-  console.log('✅ getTVSettings() - Configurações carregadas:', data);
   return data as TVSettings;
 }
 
@@ -45,8 +41,6 @@ export async function updateTVSettings(
   transitionDuration: number,
   userEmail?: string
 ): Promise<TVSettings> {
-  console.log('📤 updateTVSettings() - Atualizando...', { timerSeconds, transitionDuration });
-  
   const { data, error } = await sb
     .from('tv_settings')
     .update({
@@ -64,14 +58,11 @@ export async function updateTVSettings(
     throw error;
   }
   
-  console.log('✅ updateTVSettings() - Configurações atualizadas:', data);
   return data as TVSettings;
 }
 
 /** Subscreve a mudanças em tempo real nas configurações */
 export function subscribeToTVSettings(callback: (settings: TVSettings) => void) {
-  console.log('🔔 Inscrevendo-se em mudanças de tv_settings...');
-  
   const channel = sb
     .channel('tv_settings_changes')
     .on(
@@ -82,7 +73,6 @@ export function subscribeToTVSettings(callback: (settings: TVSettings) => void) 
         table: 'tv_settings',
       },
       (payload) => {
-        console.log('🔔 Configuração atualizada (real-time):', payload.new);
         callback(payload.new as TVSettings);
       }
     )
@@ -90,7 +80,6 @@ export function subscribeToTVSettings(callback: (settings: TVSettings) => void) 
 
   // Retornar função de cleanup
   return () => {
-    console.log('🔕 Desincrevendo de tv_settings...');
     sb.removeChannel(channel);
   };
 }
