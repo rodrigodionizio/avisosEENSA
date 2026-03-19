@@ -1,53 +1,61 @@
 // app/tv/page.tsx
 'use client';
 import { useAvisos } from '@/hooks/useAvisos';
-import { TVTopBar } from '@/components/tv/TVTopBar';
-import { TVUrgentBanner } from '@/components/tv/TVUrgentBanner';
-import { TVScrollArea } from '@/components/tv/TVScrollArea';
+import { Clock } from '@/components/layout/Clock';
+import { EensaLogo } from '@/components/ui/Logo';
+import { TVSlider } from '@/components/tv/TVSlider';
 
 /**
- * Modo TV Profissional
- * Otimizado para exibição em telas de 720p a 4K
- * Layout em 4 zonas com z-index hierarchy:
- * 
- * Zona 1 (z-100): TVTopBar - Logo, Data, Relógio, "AO VIVO"
- * Zona 2 (z-5):   TVUrgentBanner - Avisos urgentes (carousel/grid adaptativo)
- * Zona 3 (z-20):  Header Sticky - "Comunicados & Informativos" com backdrop-filter
- * Zona 4 (z-1):   TVScrollArea - Cards com scroll infinito automático
- * 
- * Fades (z-15):   Gradientes de fade para suavizar scroll
+ * Modo TV Profissional - Identidade Visual EENSA
+ * Slider horizontal de avisos (um por vez)
+ * - Timer automático: 30 segundos por aviso
+ * - Navegação manual: dots + setas
+ * - Cores: Mantém identidade visual da página principal
  */
 export default function TVPage() {
   const { avisos, loading } = useAvisos();
 
-  // Separar urgentes e normais
-  const urgentes = avisos.filter(a => a.prioridade === 'urgente');
-  const normais = avisos.filter(a => a.prioridade !== 'urgente');
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-eensa-bg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green mx-auto mb-4" />
-          <p className="text-2xl text-text2 font-semibold">Carregando avisos...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 mx-auto mb-4" style={{ borderColor: 'var(--green)' }} />
+          <p className="text-2xl font-semibold" style={{ color: 'var(--text2)' }}>Carregando avisos...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden flex flex-col">
-      {/* Zona 1: TopBar (z-100) */}
-      <TVTopBar />
+    <div className="min-h-screen bg-eensa-bg overflow-hidden flex flex-col">
+      {/* Header: Clock + Logo (identidade original) */}
+      <Clock />
+      
+      <div className="bg-eensa-surface border-b-2 border-eensa-border px-7 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <EensaLogo variant="default" size={56} />
+          <div>
+            <div className="font-display font-extrabold text-2xl text-eensa-green">
+              EENSA
+            </div>
+            <div className="text-sm text-eensa-text3 font-medium tracking-wide">
+              Construindo Histórias...
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-4 py-2">
+          <span 
+            className="w-2.5 h-2.5 rounded-full bg-eensa-teal"
+            style={{animation: 'blink 1.2s ease-in-out infinite'}}
+          />
+          <span className="font-display font-bold text-sm uppercase tracking-wide">
+            Ao Vivo
+          </span>
+        </div>
+      </div>
 
-      {/* Espaçamento para TopBar fixa */}
-      <div className="h-12" />
-
-      {/* Zona 2: Banner de Urgentes (z-5) - Condicional */}
-      {urgentes.length > 0 && <TVUrgentBanner urgentes={urgentes} />}
-
-      {/* Zona 3 + 4: Header Sticky + Scroll Infinito */}
-      <TVScrollArea avisos={normais} />
+      {/* Slider de Avisos (um por vez) */}
+      <TVSlider avisos={avisos} />
     </div>
   );
 }
