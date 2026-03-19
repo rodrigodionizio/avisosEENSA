@@ -31,7 +31,9 @@ export default function AdminPage() {
   const [tab, setTab] = useState<'ativos' | 'agendados' | 'expirados'>('ativos');
   const [modalOpen, setModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [avisoEditando, setAvisoEditando] = useState<Aviso | null>(null);
+  const [avisoParaDeletar, setAvisoParaDeletar] = useState<Aviso | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // 🔒 Proteção de rota: redirecionar para login se não autenticado
@@ -90,16 +92,26 @@ export default function AdminPage() {
     setModalOpen(true);
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Tem certeza que deseja excluir este aviso?')) return;
+  const handleDeleteClick = (id: number) => {
+    const aviso = avisos.find(a => a.id === id);
+    if (aviso) {
+      setAvisoParaDeletar(aviso);
+      setConfirmDialogOpen(true);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!avisoParaDeletar) return;
 
     try {
-      await deletarAviso(id);
+      await deletarAviso(avisoParaDeletar.id);
       await carregar();
       showToast('Aviso excluído com sucesso', 'success');
     } catch (error: any) {
       console.error('Erro ao excluir:', error);
       showToast(error?.message || 'Erro ao excluir aviso', 'error');
+    } finally {
+      setAvisoParaDeletar(null);
     }
   };
 
@@ -225,7 +237,7 @@ export default function AdminPage() {
           <AvisosTable
             avisos={tab === 'ativos' ? avisosAtivos : tab === 'agendados' ? avisosAgendados : avisosExpirados}
             onEdit={handleEdit}
-            onDelete={handleDelete}
+            onDelete={handleDeleteClick}
           />
         )}
       </PageWrapper>
@@ -247,6 +259,25 @@ export default function AdminPage() {
         currentSettings={settings}
         onSave={handleSettingsSave}
         onClose={() => setSettingsModalOpen(false)}
+      />
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialogOpen}
+        onClose={() => {
+          setConfirmDialogOpen(false);
+          setAvisoParaDeletar(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        title="Excluir aviso?"
+        message={
+          avisoParaDeletar
+            ? `Tem certeza que deseja excluir o aviso "${avisoParaDeletar.titulo}"? Esta ação não pode ser desfeita.`
+            : 'Tem certeza que deseja excluir este aviso?'
+        }
+        confirmText="Sim, excluir"
+        cancelText="Cancelar"
+        variant="danger"
       />
 
       {/* Toast */}
