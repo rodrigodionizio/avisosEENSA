@@ -47,6 +47,7 @@ export interface StatsData {
   total: number;
   ativos: number;
   urgentes: number;
+  agendados: number;
   expirados: number;
 }
 

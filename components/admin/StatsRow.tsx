@@ -8,7 +8,7 @@ interface StatsRowProps {
 export function StatsRow({ stats }: StatsRowProps) {
   return (
     <div 
-      className="grid grid-cols-2 md:grid-cols-4 gap-3.5 mb-[30px]"
+      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-[30px]"
       style={{animation: 'fadeIn 0.45s ease 0.1s both'}}
     >
       {/* Ativos */}
@@ -25,6 +25,14 @@ export function StatsRow({ stats }: StatsRowProps) {
           {stats.urgentes}
         </div>
         <div className="text-xs text-eensa-text3 font-medium">Urgentes</div>
+      </div>
+
+      {/* Agendados */}
+      <div className="bg-eensa-surface border-[1.5px] border-[rgba(147,51,234,0.3)] rounded-md p-5 pb-[18px] transition-all duration-200 hover:-translate-y-[2px] hover:shadow-sm">
+        <div className="font-display font-black text-[30px] leading-none mb-[5px] text-[#9333ea]">
+          {stats.agendados}
+        </div>
+        <div className="text-xs text-eensa-text3 font-medium">Agendados</div>
       </div>
 
       {/* Total */}

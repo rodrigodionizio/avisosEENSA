@@ -24,9 +24,10 @@ export default function AdminPage() {
   const { settings } = useSettings();
   const [avisos, setAvisos] = useState<Aviso[]>([]);
   const [avisosAtivos, setAvisosAtivos] = useState<Aviso[]>([]);
+  const [avisosAgendados, setAvisosAgendados] = useState<Aviso[]>([]);
   const [avisosExpirados, setAvisosExpirados] = useState<Aviso[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<'ativos' | 'expirados'>('ativos');
+  const [tab, setTab] = useState<'ativos' | 'agendados' | 'expirados'>('ativos');
   const [modalOpen, setModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [avisoEditando, setAvisoEditando] = useState<Aviso | null>(null);
@@ -44,14 +45,18 @@ export default function AdminPage() {
       const data = await getTodosAvisos();
       setAvisos(data);
       
-      const ativos = data.filter(a => a.ativo && !isExpirado(a));
+      const now = new Date().toISOString();
+      const ativos = data.filter(a => a.ativo && !isExpirado(a) && a.publica_em <= now);
+      const agendados = data.filter(a => a.ativo && a.publica_em > now);
       const expirados = data.filter(a => !a.ativo || isExpirado(a));
       
       // Ordenar por prioridade
       const ordem: Record<string, number> = { urgente: 0, normal: 1, info: 2 };
       ativos.sort((a, b) => ordem[a.prioridade] - ordem[b.prioridade]);
+      agendados.sort((a, b) => new Date(a.publica_em).getTime() - new Date(b.publica_em).getTime());
       
       setAvisosAtivos(ativos);
+      setAvisosAgendados(agendados);
       setAvisosExpirados(expirados);
     } catch (error: any) {
       console.error('Erro ao carregar avisos:', error);
@@ -118,6 +123,7 @@ export default function AdminPage() {
     total: avisos.length,
     ativos: avisosAtivos.length,
     urgentes: avisosAtivos.filter(a => a.prioridade === 'urgente').length,
+    agendados: avisosAgendados.length,
     expirados: avisosExpirados.length,
   };
 
@@ -181,6 +187,16 @@ export default function AdminPage() {
               <Icons.List size={16} /> Avisos ativos
             </button>
             <button
+              onClick={() => setTab('agendados')}
+              className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                tab === 'agendados'
+                  ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                  : 'bg-transparent text-eensa-text2'
+              }`}
+            >
+              <Icons.Clock size={16} /> Agendados
+            </button>
+            <button
               onClick={() => setTab('expirados')}
               className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
                 tab === 'expirados'
@@ -206,7 +222,7 @@ export default function AdminPage() {
           <div className="text-center py-10 text-eensa-text3">Carregando...</div>
         ) : (
           <AvisosTable
-            avisos={tab === 'ativos' ? avisosAtivos : avisosExpirados}
+            avisos={tab === 'ativos' ? avisosAtivos : tab === 'agendados' ? avisosAgendados : avisosExpirados}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
