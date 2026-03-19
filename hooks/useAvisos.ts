@@ -8,12 +8,14 @@ export function useAvisos() {
   const [avisos, setAvisos] = useState<Aviso[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
   const carregar = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getAvisosAtivos();
       setAvisos(data);
+      setLastUpdate(new Date());
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -33,5 +35,5 @@ export function useAvisos() {
     infos: avisos.filter(a => a.prioridade === 'info'),
   };
 
-  return { avisos, grouped, loading, error, recarregar: carregar };
+  return { avisos, grouped, loading, error, lastUpdate, recarregar: carregar };
 }

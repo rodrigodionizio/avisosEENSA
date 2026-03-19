@@ -99,3 +99,10 @@ export function subscribeToAvisos(callback: () => void) {
     }, callback)
     .subscribe();
 }
+
+// ============================================================================
+// FEATURE 1: LINKS PERMANENTES
+// ============================================================================
+// NOTA: Funções getAvisoPorId() e getOutrosAvisosAtivos() foram movidas para
+// lib/supabase/queries-server.ts para compatibilidade com Server Components.
+// Use queries-server.ts em Server Components e API Routes.

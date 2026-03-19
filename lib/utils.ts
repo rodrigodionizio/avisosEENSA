@@ -54,3 +54,53 @@ export const prioridadeConfig: Record<Prioridade, {
     barColor: 'bg-eensa-yellow',
   },
 };
+
+// ============================================================================
+// SLUG GENERATION (SEO-friendly URLs)
+// ============================================================================
+
+/**
+ * Gera slug SEO-friendly a partir de um título
+ * 
+ * @param titulo - Título do aviso
+ * @returns Slug formatado (lowercase, sem acentos, hífens)
+ * 
+ * @example
+ * generateSlug("Reunião Importante: Provas Finais (2026)")
+ * // => "reuniao-importante-provas-finais-2026"
+ */
+export function generateSlug(titulo: string): string {
+  return titulo
+    .toLowerCase()
+    .normalize('NFD') // Decompor caracteres acentuados
+    .replace(/[\u0300-\u036f]/g, '') // Remover acentos
+    .replace(/[^a-z0-9\s-]/g, ' ') // Caracteres especiais → espaços
+    .trim()
+    .replace(/\s+/g, '-') // Espaços → hífens
+    .replace(/-+/g, '-') // Múltiplos hífens → único
+    .substring(0, 100); // Limitar tamanho (SEO best practice)
+}
+
+/**
+ * Valida formato de slug
+ * 
+ * @param slug - String a validar
+ * @returns true se o slug for válido
+ */
+export function isValidSlug(slug: string): boolean {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+}
+
+/**
+ * Gera URL completa para um aviso
+ * 
+ * @param aviso - Objeto aviso com id e slug
+ * @param useSlug - Se true, usa slug; se false, usa ID (padrão: true)
+ * @returns URL relativa (/aviso/slug ou /aviso/id)
+ */
+export function getAvisoUrl(aviso: Aviso, useSlug: boolean = true): string {
+  if (useSlug && aviso.slug) {
+    return `/aviso/${aviso.slug}`;
+  }
+  return `/aviso/${aviso.id}`;
+}

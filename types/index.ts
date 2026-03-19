@@ -49,3 +49,11 @@ export interface StatsData {
   urgentes: number;
   expirados: number;
 }
+
+export interface TVSettings {
+  id: number;
+  timer_seconds: number;
+  transition_duration: number;
+  updated_at?: string;
+  updated_by?: string;
+}

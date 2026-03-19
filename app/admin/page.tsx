@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { useSettings } from '@/hooks/useSettings';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { StatsRow } from '@/components/admin/StatsRow';
 import { AvisosTable } from '@/components/admin/AvisosTable';
 import { AvisoForm } from '@/components/avisos/AvisoForm';
+import { TVSettingsForm } from '@/components/admin/TVSettingsForm';
 import { Toast } from '@/components/ui/Toast';
 import { ButtonNew } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
@@ -19,12 +21,14 @@ import type { Aviso, AvisoFormData, StatsData } from '@/types';
 export default function AdminPage() {
   const router = useRouter();
   const { logado, loading: authLoading, usuario, getNome } = useAuth();
+  const { settings } = useSettings();
   const [avisos, setAvisos] = useState<Aviso[]>([]);
   const [avisosAtivos, setAvisosAtivos] = useState<Aviso[]>([]);
   const [avisosExpirados, setAvisosExpirados] = useState<Aviso[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<'ativos' | 'expirados'>('ativos');
   const [modalOpen, setModalOpen] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [avisoEditando, setAvisoEditando] = useState<Aviso | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -66,6 +70,10 @@ export default function AdminPage() {
     setToast({ message, type });
   };
 
+
+  const handleSettingsSave = () => {
+    showToast('Configurações do Modo TV atualizadas com sucesso! 🎉', 'success');
+  };
   const handleNovo = () => {
     setAvisoEditando(null);
     setModalOpen(true);
@@ -141,9 +149,19 @@ export default function AdminPage() {
               )}
             </p>
           </div>
-          <ButtonNew onClick={handleNovo}>
-            <Icons.Plus size={18} /> Novo aviso
-          </ButtonNew>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSettingsModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-eensa-surface border border-eensa-border rounded-lg text-sm font-display font-semibold text-eensa-text2 hover:bg-eensa-surface2 hover:text-eensa-green transition-all duration-200"
+              title="Configurações do Modo TV"
+            >
+              <Icons.Settings size={18} />
+              <span className="hidden sm:inline">Modo TV</span>
+            </button>
+            <ButtonNew onClick={handleNovo}>
+              <Icons.Plus size={18} /> Novo aviso
+            </ButtonNew>
+          </div>
         </div>
 
         {/* Stats */}
@@ -204,6 +222,14 @@ export default function AdminPage() {
           setModalOpen(false);
           setAvisoEditando(null);
         }}
+      />
+
+      {/* Modal de Configurações TV */}
+      <TVSettingsForm
+        isOpen={settingsModalOpen}
+        currentSettings={settings}
+        onSave={handleSettingsSave}
+        onClose={() => setSettingsModalOpen(false)}
       />
 
       {/* Toast */}
