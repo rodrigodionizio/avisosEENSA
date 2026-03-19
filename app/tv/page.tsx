@@ -1,9 +1,11 @@
 // app/tv/page.tsx
 'use client';
+import Link from 'next/link';
 import { useAvisos } from '@/hooks/useAvisos';
 import { Clock } from '@/components/layout/Clock';
 import { EensaLogo } from '@/components/ui/Logo';
 import { TVSlider } from '@/components/tv/TVSlider';
+import { formatDataHora } from '@/lib/utils';
 
 /**
  * Modo TV Profissional - Identidade Visual EENSA
@@ -13,7 +15,7 @@ import { TVSlider } from '@/components/tv/TVSlider';
  * - Cores: Mantém identidade visual da página principal
  */
 export default function TVPage() {
-  const { avisos, loading } = useAvisos();
+  const { avisos, loading, lastUpdate } = useAvisos();
 
   if (loading) {
     return (
@@ -32,7 +34,7 @@ export default function TVPage() {
       <Clock />
       
       <div className="bg-eensa-surface border-b-2 border-eensa-border px-7 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity cursor-pointer">
           <EensaLogo variant="default" size={56} />
           <div>
             <div className="font-display font-extrabold text-2xl text-eensa-green">
@@ -42,14 +44,14 @@ export default function TVPage() {
               Construindo Histórias...
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-2 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-4 py-2">
+        </Link>
+        <div className="flex items-center gap-2 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-5 py-2">
           <span 
             className="w-2.5 h-2.5 rounded-full bg-eensa-teal"
             style={{animation: 'blink 1.2s ease-in-out infinite'}}
           />
           <span className="font-display font-bold text-sm uppercase tracking-wide">
-            Ao Vivo
+            Atualizado: {formatDataHora(lastUpdate.toISOString())}
           </span>
         </div>
       </div>
