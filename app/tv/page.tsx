@@ -1,57 +1,61 @@
 // app/tv/page.tsx
 'use client';
-import Link from 'next/link';
-import { Clock } from '@/components/layout/Clock';
-import { AvisoList } from '@/components/avisos/AvisoList';
-import { Icons } from '@/components/ui/Icons';
-import { EensaLogo } from '@/components/ui/Logo';
 import { useAvisos } from '@/hooks/useAvisos';
+import { Clock } from '@/components/layout/Clock';
+import { EensaLogo } from '@/components/ui/Logo';
+import { TVSlider } from '@/components/tv/TVSlider';
 
+/**
+ * Modo TV Profissional - Identidade Visual EENSA
+ * Slider horizontal de avisos (um por vez)
+ * - Timer automático: 30 segundos por aviso
+ * - Navegação manual: dots + setas
+ * - Cores: Mantém identidade visual da página principal
+ */
 export default function TVPage() {
-  const { grouped, loading, avisos } = useAvisos();
+  const { avisos, loading } = useAvisos();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-eensa-bg flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 mx-auto mb-4" style={{ borderColor: 'var(--green)' }} />
+          <p className="text-2xl font-semibold" style={{ color: 'var(--text2)' }}>Carregando avisos...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-eensa-bg">
-      {/* Clock Bar */}
+    <div className="min-h-screen bg-eensa-bg overflow-hidden flex flex-col">
+      {/* Header: Clock + Logo (identidade original) */}
       <Clock />
-
-      {/* Logo Bar */}
-      <div className="bg-eensa-surface border-b-2 border-eensa-border px-7 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-3.5">
-          <EensaLogo variant="default" size={52} />
+      
+      <div className="bg-eensa-surface border-b-2 border-eensa-border px-7 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <EensaLogo variant="default" size={56} />
           <div>
-            <div className="font-display font-extrabold text-xl text-eensa-green">
+            <div className="font-display font-extrabold text-2xl text-eensa-green">
               EENSA
             </div>
-            <div className="text-xs text-eensa-text3 font-medium tracking-wide">
+            <div className="text-sm text-eensa-text3 font-medium tracking-wide">
               Construindo Histórias...
             </div>
           </div>
         </div>
+        <div className="flex items-center gap-2 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-4 py-2">
+          <span 
+            className="w-2.5 h-2.5 rounded-full bg-eensa-teal"
+            style={{animation: 'blink 1.2s ease-in-out infinite'}}
+          />
+          <span className="font-display font-bold text-sm uppercase tracking-wide">
+            Ao Vivo
+          </span>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-[1000px] mx-auto px-7 py-7 pb-[60px]">
-        {loading ? (
-          <div className="text-center py-10 text-eensa-text3">Carregando avisos...</div>
-        ) : (
-          <div className="tv">
-            <AvisoList
-              avisos={avisos}
-              urgentes={grouped.urgentes}
-              normais={grouped.normais}
-              infos={grouped.infos}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Back Button */}
-      <Link href="/">
-        <button className="fixed bottom-6 right-6 bg-[rgba(26,107,46,0.85)] text-white/80 border-none rounded-full px-4 py-2 font-display font-semibold text-xs cursor-pointer backdrop-blur-lg transition-all duration-200 hover:bg-eensa-green hover:text-white flex items-center gap-2">
-          <Icons.Arrow size={16} className="rotate-180" /> Sair do modo TV
-        </button>
-      </Link>
+      {/* Slider de Avisos (um por vez) */}
+      <TVSlider avisos={avisos} />
     </div>
   );
 }

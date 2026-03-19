@@ -164,3 +164,8 @@ export const Icons = {
     </svg>
   ),
 };
+
+// Named exports para compatibilidade
+export const ClockIcon = Icons.Clock;
+export const UserIcon = Icons.User;
+export const ListIcon = Icons.List;
