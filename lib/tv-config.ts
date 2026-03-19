@@ -7,7 +7,7 @@
 export const TV_CONFIG = {
   // Slider de avisos
   slider: {
-    autoPlayInterval: 30000, // 30 segundos (ajustável entre 25000-35000)
+    autoPlayInterval: 20000, // 20 segundos (ajustável entre 15000-35000)
     transitionDuration: 500, // duração da transição em ms
     pauseOnHover: false, // TV não tem hover
   },

@@ -4,12 +4,11 @@ import { useState, useEffect } from 'react';
 import { Aviso } from '@/types';
 import { Icons } from '@/components/ui/Icons';
 import { formatDataHora } from '@/lib/utils';
+import { TV_CONFIG } from '@/lib/tv-config';
 
 interface TVSliderProps {
   avisos: Aviso[];
 }
-
-const TIMER_INTERVAL = 30000; // 30 segundos
 
 export function TVSlider({ avisos }: TVSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +20,7 @@ export function TVSlider({ avisos }: TVSliderProps) {
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % avisos.length);
-    }, TIMER_INTERVAL);
+    }, TV_CONFIG.slider.autoPlayInterval);
 
     return () => clearInterval(interval);
   }, [avisos.length, isPaused]);
