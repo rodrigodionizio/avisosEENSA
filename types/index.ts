@@ -20,8 +20,10 @@ export interface Aviso {
   categoria: Categoria;
   autor: string;
   criado_em: string;        // ISO 8601
+  publica_em: string;       // ISO 8601 — data/hora de publicação (agendamento)
   expira_em: string | null; // ISO 8601 — null = não expira
   ativo: boolean;
+  slug: string;             // URL amigável (SEO slug)
 }
 
 export interface AvisoFormData {
@@ -30,7 +32,9 @@ export interface AvisoFormData {
   prioridade: Prioridade;
   categoria: Categoria;
   autor: string;
+  publica_em?: string;      // Opcional: default NOW() se omitido
   expira_em: string | null;
+  slug?: string;            // Opcional: gerado automaticamente se omitido
 }
 
 export interface AvisosGrouped {

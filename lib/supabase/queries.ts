@@ -15,15 +15,18 @@ function logSupabaseError(operation: string, error: any) {
   console.groupEnd();
 }
 
-/** Retorna todos os avisos ativos e não expirados, ordenados por prioridade */
+/** Retorna todos os avisos ativos, já publicados e não expirados, ordenados por prioridade */
 export async function getAvisosAtivos(): Promise<Aviso[]> {
   console.log('📥 getAvisosAtivos() - Iniciando requisição...');
+  
+  const now = new Date().toISOString();
   
   const { data, error } = await sb
     .from('avisos')
     .select('*')
     .eq('ativo', true)
-    .or(`expira_em.is.null,expira_em.gte.${new Date().toISOString()}`)
+    .lte('publica_em', now)  // ✅ Apenas avisos já publicados (agendamento)
+    .or(`expira_em.is.null,expira_em.gte.${now}`)
     .order('criado_em', { ascending: false });
 
   if (error) {

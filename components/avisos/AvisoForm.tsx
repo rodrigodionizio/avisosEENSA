@@ -18,6 +18,7 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
   const [prioridade, setPrioridade] = useState<Prioridade>('normal');
   const [categoria, setCategoria] = useState<Categoria>('Geral');
   const [autor, setAutor] = useState('');
+  const [publicaEm, setPublicaEm] = useState('');
   const [expiraEm, setExpiraEm] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -29,12 +30,17 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
       setPrioridade(aviso.prioridade);
       setCategoria(aviso.categoria);
       setAutor(aviso.autor);
+      setPublicaEm(aviso.publica_em ? aviso.publica_em.slice(0, 16) : '');
       setExpiraEm(aviso.expira_em ? aviso.expira_em.slice(0, 16) : '');
     } else {
-      // Valor padrão: hoje + 7 dias
-      const defaultDate = new Date();
-      defaultDate.setDate(defaultDate.getDate() + 7);
-      setExpiraEm(defaultDate.toISOString().slice(0, 16));
+      // Valores padrão:
+      // Publicação: AGORA
+      setPublicaEm(new Date().toISOString().slice(0, 16));
+      
+      // Expiração: hoje + 7 dias
+      const defaultExpira = new Date();
+      defaultExpira.setDate(defaultExpira.getDate() + 7);
+      setExpiraEm(defaultExpira.toISOString().slice(0, 16));
     }
   }, [aviso]);
 
@@ -56,6 +62,15 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
     if (!autor || autor.length < 2) {
       newErrors.autor = 'Autor deve ter no mínimo 2 caracteres';
     }
+    
+    // Validar: publica_em deve ser <= expira_em
+    if (publicaEm && expiraEm) {
+      const publica = new Date(publicaEm);
+      const expira = new Date(expiraEm);
+      if (publica > expira) {
+        newErrors.publicaEm = 'Data de publicação deve ser anterior à expiração';
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -74,6 +89,7 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
         prioridade,
         categoria,
         autor,
+        publica_em: publicaEm || undefined,
         expira_em: expiraEm || null,
       });
       onClose();
@@ -197,17 +213,39 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
           </div>
         </div>
 
-        {/* Expiração */}
-        <div className="mb-[17px]">
-          <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
-            Data de Expiração
-          </label>
-          <input
-            type="datetime-local"
-            value={expiraEm}
-            onChange={(e) => setExpiraEm(e.target.value)}
-            className="w-full border-[1.5px] border-eensa-border rounded-lg px-[13px] py-2.5 font-body text-sm text-eensa-text bg-eensa-bg transition-all outline-none focus:border-eensa-green-mid focus:shadow-[0_0_0_3px_rgba(45,138,71,0.12)] focus:bg-white"
-          />
+        {/* Row: Publicação + Expiração */}
+        <div className="grid grid-cols-2 gap-3.5 mb-[17px]">
+          <div>
+            <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
+              📅 Data de Publicação
+            </label>
+            <input
+              type="datetime-local"
+              value={publicaEm}
+              onChange={(e) => setPublicaEm(e.target.value)}
+              className="w-full border-[1.5px] border-eensa-border rounded-lg px-[13px] py-2.5 font-body text-sm text-eensa-text bg-eensa-bg transition-all outline-none focus:border-eensa-green-mid focus:shadow-[0_0_0_3px_rgba(45,138,71,0.12)] focus:bg-white"
+              required
+            />
+            {errors.publicaEm && <p className="text-eensa-red text-xs mt-1">{errors.publicaEm}</p>}
+            <p className="text-[10px] text-eensa-text3 mt-1">
+              ℹ️ Quando o aviso ficará visível
+            </p>
+          </div>
+
+          <div>
+            <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
+              ⏰ Data de Expiração
+            </label>
+            <input
+              type="datetime-local"
+              value={expiraEm}
+              onChange={(e) => setExpiraEm(e.target.value)}
+              className="w-full border-[1.5px] border-eensa-border rounded-lg px-[13px] py-2.5 font-body text-sm text-eensa-text bg-eensa-bg transition-all outline-none focus:border-eensa-green-mid focus:shadow-[0_0_0_3px_rgba(45,138,71,0.12)] focus:bg-white"
+            />
+            <p className="text-[10px] text-eensa-text3 mt-1">
+              ℹ️ Quando o aviso será removido (opcional)
+            </p>
+          </div>
         </div>
 
         {/* Actions */}
