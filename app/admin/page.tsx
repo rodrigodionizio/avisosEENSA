@@ -12,6 +12,7 @@ import { AvisosTable } from '@/components/admin/AvisosTable';
 import { AvisoForm } from '@/components/avisos/AvisoForm';
 import { TVSettingsForm } from '@/components/admin/TVSettingsForm';
 import { Toast } from '@/components/ui/Toast';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ButtonNew } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
 import { getTodosAvisos, criarAviso, editarAviso, deletarAviso } from '@/lib/supabase/queries';
