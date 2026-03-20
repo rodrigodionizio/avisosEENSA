@@ -1,6 +1,7 @@
 // lib/supabase/queries.ts
 import { createClient } from './client';
 import type { Aviso, AvisoFormData } from '@/types';
+import { generateSlug } from '@/lib/utils';
 
 const sb = createClient();
 
@@ -54,9 +55,12 @@ export async function getTodosAvisos(): Promise<Aviso[]> {
 
 /** Cria novo aviso */
 export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
+  // Gerar slug automaticamente a partir do título
+  const slug = form.slug || generateSlug(form.titulo);
+  
   const { data, error } = await sb
     .from('avisos')
-    .insert([{ ...form, ativo: true }])
+    .insert([{ ...form, slug, ativo: true }])
     .select()
     .single();
   if (error) throw error;
@@ -93,9 +97,15 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
 
 /** Edita aviso existente */
 export async function editarAviso(id: number, form: Partial<AvisoFormData>): Promise<Aviso> {
+  // Se o título mudou, regenerar o slug
+  const updateData = { ...form };
+  if (form.titulo && !form.slug) {
+    updateData.slug = generateSlug(form.titulo);
+  }
+  
   const { data, error} = await sb
     .from('avisos')
-    .update(form)
+    .update(updateData)
     .eq('id', id)
     .select()
     .single();
