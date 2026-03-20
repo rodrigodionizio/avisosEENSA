@@ -178,6 +178,36 @@ export const Icons = {
       <path d="M8 2V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
+
+  // Notificações
+  Bell: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M6 13.5C6 14.3284 6.67157 15 7.5 15H8.5C9.32843 15 10 14.3284 10 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M3 10H13L12 5C12 2.79086 10.2091 1 8 1C5.79086 1 4 2.79086 4 5L3 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  ),
+
+  BellOff: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M6 13.5C6 14.3284 6.67157 15 7.5 15H8.5C9.32843 15 10 14.3284 10 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M3 10H13L12 5C12 2.79086 10.2091 1 8 1C5.79086 1 4 2.79086 4 5L3 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" opacity="0.4" />
+      <path d="M2 2L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+
+  Loader: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" opacity="0.25" />
+      <path d="M14 8C14 4.68629 11.3137 2 8 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  ),
+
+  Send: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <path d="M2 7L13 2L8 13L7 9L2 7Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M7 9L13 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 // Named exports para compatibilidade

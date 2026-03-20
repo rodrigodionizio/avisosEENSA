@@ -331,6 +331,214 @@ Desenvolver um sistema web moderno e responsivo para gerenciamento e exibição 
 
 ---
 
+### Fase 12: Sistema de Push Notifications 🔔
+**Data:** 20/03/2026  
+**Objetivo:** Implementar sistema de notificações push para alertar usuários sobre avisos urgentes
+
+**Motivação:**
+- Aumentar alcance de avisos urgentes
+- Notificação instantânea mesmo com app fechado
+- Zero custo (FCM gratuito + Vercel serverless)
+- Experiência mobile moderna
+
+**Arquitetura Implementada:**
+- **web-push** (npm) - VAPID + FCM transparente
+- **Service Workers** - Background push handlers
+- **Supabase** - Armazenamento de subscriptions
+- **Vercel Edge Functions** - API para envio de push
+
+**Implementações Realizadas:**
+
+1. **Infraestrutura Base:**
+   - ✅ npm install web-push + @types/web-push
+   - ✅ Geração de VAPID keys (Public + Private)
+   - ✅ Configuração .env.local:
+     ```
+     NEXT_PUBLIC_VAPID_PUBLIC_KEY=BKwIP6u9...
+     VAPID_PRIVATE_KEY=A3WAE32...
+     VAPID_SUBJECT=mailto:rodrigo.dionizio@gmail.com
+     NEXT_PUBLIC_BASE_URL=https://avisos-eensa.vercel.app
+     ```
+
+2. **Service Worker (`public/sw.js`):**
+   - Push event handler: Exibe notificação custom
+   - Notification click: Abre URL do aviso (foca se já aberto)
+   - Vibração: Pattern [200, 100, 200]
+   - Actions: "Ver aviso" e "Fechar"
+   - Install/activate: Immediate control
+
+3. **Database Schema (`.supabase/CREATE_PUSH_SUBSCRIPTIONS.sql`):**
+   ```sql
+   CREATE TABLE push_subscriptions (
+     id BIGSERIAL PRIMARY KEY,
+     endpoint TEXT NOT NULL UNIQUE,
+     p256dh TEXT NOT NULL,
+     auth TEXT NOT NULL,
+     user_agent TEXT,
+     total_recebidas INT DEFAULT 0,
+     criado_em TIMESTAMPTZ DEFAULT NOW(),
+     atualizado_em TIMESTAMPTZ DEFAULT NOW(),
+     ativo BOOLEAN DEFAULT TRUE
+   );
+   ```
+   - RLS policies: Public INSERT/DELETE, Authenticated SELECT/UPDATE
+   - Indexes: ativo, criado_em
+   - Trigger: auto-update atualizado_em
+
+4. **React Hook (`hooks/usePushNotifications.ts`):**
+   - Estados: idle, loading, subscribed, denied, unsupported
+   - `subscribe()`: Registra SW → Pede permissão → Salva no Supabase
+   - `unsubscribe()`: Remove do Supabase → Cancela subscription
+   - `urlBase64ToUint8Array()`: Converte VAPID key para browser
+   - Auto-check ao montar componente
+
+5. **UI Components:**
+   - **`PushButton.tsx`**: Botão ativar/desativar
+     - 4 estados com ícones (Bell, BellOff, Loader)
+     - Responsivo: "Receber notificações" → "Ativar" em mobile
+     - Touch compliant: min-h-[44px]
+     - Cores: Teal (subscribe) / Red (unsubscribe)
+   
+   - **`PushPromoBanner.tsx`**: Banner promocional
+     - Gradient teal-to-green
+     - Lista de benefícios com checkmarks
+     - Dismiss button com localStorage persistence
+     - Aviso compatibilidade iOS (PWA apenas)
+     - Layout responsivo: flex-col → flex-row
+
+6. **Ícones Adicionados (`components/ui/Icons.tsx`):**
+   - Bell: Sino de notificação
+   - BellOff: Sino com slash (desativado)
+   - Loader: Spinner circular (loading)
+   - Send: Seta de envio (botão manual admin)
+
+7. **API Route (`app/api/push/send/route.ts`):**
+   - **POST**: Enviar notificações
+     - Auth: Apenas admin autenticado
+     - Validação: titulo e corpo obrigatórios
+     - Busca: subscriptions ativas do Supabase
+     - Envio: Paralelo com Promise.allSettled
+     - Payload: title, body (120 char max), tag, url, badge
+     - Cleanup: Remove subscriptions inválidas automaticamente
+     - Response: {enviados, invalidas, message}
+   
+   - **GET**: Status das subscriptions
+     - Auth: Admin apenas
+     - Retorna: total, lista de subscriptions ativas
+
+8. **Integração com Avisos (`lib/supabase/queries.ts`):**
+   - Modificado `criarAviso()`:
+     - Após inserir aviso no DB
+     - Se prioridade === 'urgente'
+     - Chama POST /api/push/send automaticamente
+     - Não bloqueia em caso de falha (try/catch)
+     - Log de sucesso: "✅ Push enviado: X notificações"
+
+9. **UI Integration (`app/page.tsx`):**
+   - Banner promocional inserido na home
+   - Posição: Após header, antes banner de urgentes
+   - Dismissível via localStorage
+   - Auto-hide após aceitar notificações
+
+**Arquivos Criados (9 arquivos):**
+- ✅ `public/sw.js` - Service Worker (push handler)
+- ✅ `.supabase/CREATE_PUSH_SUBSCRIPTIONS.sql` - Schema DB
+- ✅ `hooks/usePushNotifications.ts` - React hook subscription
+- ✅ `components/ui/PushButton.tsx` - Botão ativar/desativar
+- ✅ `components/ui/PushPromoBanner.tsx` - Banner promocional
+- ✅ `app/api/push/send/route.ts` - API envio de push
+- ✅ `.documentation/PUSH_NOTIFICATIONS_SETUP.md` - Guia completo
+- ✅ `.env.local` - Atualizado com VAPID keys
+- ✅ `components/ui/Icons.tsx` - Adicionados 4 ícones
+
+**Arquivos Modificados (3 arquivos):**
+- ✅ `lib/supabase/queries.ts` - criarAviso() com push auto
+- ✅ `app/page.tsx` - Adicionado PushPromoBanner
+- ✅ `package.json` - Dependências: web-push, @types/web-push
+
+**Fluxo Completo:**
+```
+1. Usuário acessa home
+   → Vê banner "Receba notificações em tempo real"
+   
+2. Clica "Ativar notificações"
+   → Service Worker registrado
+   → Browser pede permissão
+   → Subscription criada com VAPID key
+   → Endpoint + keys salvos no Supabase
+   
+3. Admin cria aviso urgente
+   → criarAviso() salva no DB
+   → Detecta prioridade === 'urgente'
+   → POST /api/push/send
+   → Busca todas subscriptions ativas
+   → Envia notificação via web-push → FCM
+   → Dispositivos recebem push (mesmo offline)
+   
+4. Usuário recebe notificação
+   → Notificação exibida pelo Service Worker
+   → Clica "Ver aviso"
+   → App abre na página do aviso
+```
+
+**Segurança:**
+- ✅ RLS na tabela push_subscriptions
+- ✅ API com auth check (admin apenas)
+- ✅ VAPID keys em variáveis de ambiente (não commitadas)
+- ✅ Rate limiting recomendado (Vercel Edge Config)
+
+**Compatibilidade:**
+- ✅ **Android**: Chrome, Edge, Firefox, Opera, Samsung Internet
+- ✅ **Desktop**: Chrome, Edge, Firefox, Opera (Win/Mac/Linux)
+- ⚠️ **iOS Safari**: Apenas em PWA (não no browser)
+- ❌ **Safari Mac**: Sem suporte a web push
+- Banner exibe aviso automático para usuários iOS
+
+**Custo:**
+- **R$ 0/mês** (100% gratuito)
+- FCM: 1 milhão de mensagens/mês grátis
+- Vercel: Serverless free tier (100GB-hours)
+- Supabase: 500MB storage grátis
+
+**Benefícios:**
+- ✅ **Alcance instantâneo:** Usuários notificados em segundos
+- ✅ **Zero config externa:** Sem Firebase signup, sem Google Cloud
+- ✅ **Background delivery:** Funciona com app fechado
+- ✅ **Auto-cleanup:** Subscriptions inválidas removidas automaticamente
+- ✅ **Graceful degradation:** iOS mostra mensagem clara
+
+**Validação:**
+```bash
+npm run build
+✓ Compiled successfully in 3.6s
+✓ TypeScript: 0 errors
+✓ Build: All files compiled
+```
+
+**Próximos Passos:**
+1. [ ] Executar SQL migration no Supabase
+2. [ ] Configurar variáveis de ambiente no Vercel
+3. [ ] Deploy para produção
+4. [ ] Testar em Android Chrome
+5. [ ] Testar iOS Safari PWA
+6. [ ] Monitorar taxa de inscrição
+
+**Documentação:**
+- Guia completo: `.documentation/PUSH_NOTIFICATIONS_SETUP.md`
+- SQL migration: `.supabase/CREATE_PUSH_SUBSCRIPTIONS.sql`
+- Troubleshooting e monitoramento inclusos
+
+**Lições Aprendidas:**
+- FCM é transparente com web-push (sem signup necessário)
+- VAPID keys são suficientes para autenticação
+- Service Workers são essenciais para push background
+- RLS deve permitir INSERT public para anonymous users
+- Supabase client não suporta .sql - usar updates simples
+- Type casting necessário: Uint8Array → BufferSource
+- Auto-send em criarAviso não deve bloquear em caso de falha
+
+---
+
 ## 📝 Commits Detalhados
 
 ### Commit #1: Initial Commit

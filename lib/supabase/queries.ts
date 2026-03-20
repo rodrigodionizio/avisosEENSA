@@ -60,7 +60,35 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
     .select()
     .single();
   if (error) throw error;
-  return data as Aviso;
+  
+  const aviso = data as Aviso;
+  
+  // 🔔 Se for urgente, envia push notification
+  if (aviso.prioridade === 'urgente') {
+    try {
+      const response = await fetch('/api/push/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          avisoId: aviso.id,
+          titulo: aviso.titulo,
+          corpo: aviso.corpo.slice(0, 120), // Limita para 120 caracteres
+        }),
+      });
+      
+      if (!response.ok) {
+        console.warn('⚠️ Falha ao enviar push notification:', response.statusText);
+      } else {
+        const resultado = await response.json();
+        console.log(`✅ Push enviado: ${resultado.enviados} notificações`);
+      }
+    } catch (pushError) {
+      // Não bloqueia a criação do aviso se push falhar
+      console.error('❌ Erro ao enviar push:', pushError);
+    }
+  }
+  
+  return aviso;
 }
 
 /** Edita aviso existente */

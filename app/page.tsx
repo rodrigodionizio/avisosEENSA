@@ -8,6 +8,7 @@ import { AvisoList } from '@/components/avisos/AvisoList';
 import { ButtonTV } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
 import { useAvisos } from '@/hooks/useAvisos';
+import { PushPromoBanner } from '@/components/ui/PushPromoBanner';
 
 export default function HomePage() {
   const { grouped, loading, avisos } = useAvisos();
@@ -40,6 +41,9 @@ export default function HomePage() {
             </ButtonTV>
           </Link>
         </div>
+
+        {/* Banner Promocional de Push Notifications */}
+        <PushPromoBanner />
 
         {/* Banner Urgente */}
         {urgenteCount > 0 && (
