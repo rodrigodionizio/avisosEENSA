@@ -4,7 +4,7 @@ import { Icons } from '@/components/ui/Icons';
 
 export function Footer() {
   return (
-    <footer className="bg-eensa-surface border-t-[1.5px] border-eensa-border mt-12 py-8 px-7">
+    <footer className="bg-eensa-surface border-t-[1.5px] border-eensa-border mt-12 py-8 pb-safe-or-8 px-7">
       <div className="max-w-5xl mx-auto">
         {/* Informações da Escola */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">

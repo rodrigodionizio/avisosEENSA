@@ -18,14 +18,14 @@ export default function HomePage() {
       <Header />
       <PageWrapper>
         {/* Page Header */}
-        <div className="flex justify-between items-start mb-7 animate-fade-in">
-          <div>
-            <h1 className="font-display font-extrabold text-[22px] text-eensa-green leading-tight">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4 mb-7 animate-fade-in">
+          <div className="flex-1 min-w-0">
+            <h1 className="font-display font-extrabold text-xl sm:text-[22px] text-eensa-green leading-tight">
               Quadro de Avisos
             </h1>
-            <div className="text-[13px] text-eensa-text3 mt-1.5 flex items-center gap-2 flex-wrap">
+            <div className="text-xs sm:text-[13px] text-eensa-text3 mt-1.5 flex items-center gap-2 flex-wrap">
               <span>{avisos.length} avisos ativos</span>
-              <span className="inline-flex items-center gap-1 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-2.5 py-[3px] font-display font-bold text-[11px]">
+              <span className="inline-flex items-center gap-1 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-2.5 py-[3px] font-display font-bold text-[10px] sm:text-[11px]">
                 <span 
                   className="w-1.5 h-1.5 rounded-full bg-eensa-teal"
                   style={{animation: 'blink 1.2s ease-in-out infinite'}}
@@ -34,9 +34,9 @@ export default function HomePage() {
               </span>
             </div>
           </div>
-          <Link href="/tv">
+          <Link href="/tv" className="flex-shrink-0">
             <ButtonTV>
-              <Icons.TV size={16} className="inline-block" /> Modo TV
+              <Icons.TV size={16} className="inline-block" /> <span className="hidden xs:inline">Modo TV</span><span className="xs:hidden">TV</span>
             </ButtonTV>
           </Link>
         </div>

@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '375px',
+      },
       fontFamily: {
         display: ['Nunito', 'sans-serif'],
         body: ['Nunito Sans', 'sans-serif'],
@@ -49,9 +52,39 @@ const config: Config = {
         md: '0 4px 20px rgba(26,107,46,0.11)',
         lg: '0 8px 40px rgba(26,107,46,0.16)',
       },
+      spacing: {
+        'safe-top': 'var(--safe-area-top)',
+        'safe-right': 'var(--safe-area-right)',
+        'safe-bottom': 'var(--safe-area-bottom)',
+        'safe-left': 'var(--safe-area-left)',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }: any) {
+      const newUtilities = {
+        '.pt-safe': {
+          paddingTop: 'max(1rem, env(safe-area-inset-top))',
+        },
+        '.pb-safe': {
+          paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+        },
+        '.pl-safe': {
+          paddingLeft: 'max(1rem, env(safe-area-inset-left))',
+        },
+        '.pr-safe': {
+          paddingRight: 'max(1rem, env(safe-area-inset-right))',
+        },
+        '.pt-safe-or-4': {
+          paddingTop: 'max(1rem, env(safe-area-inset-top))',
+        },
+        '.pb-safe-or-8': {
+          paddingBottom: 'max(2rem, env(safe-area-inset-bottom))',
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };
 
 export default config;

@@ -52,39 +52,39 @@ export function ConfirmDialog({
 
   return (
     <div 
-      className="fixed inset-0 bg-[rgba(26,58,34,0.4)] backdrop-blur-sm z-[600] flex items-center justify-center p-5 animate-[fadeOverlay_0.2s_ease]"
+      className="fixed inset-0 bg-[rgba(26,58,34,0.4)] backdrop-blur-sm z-[600] flex items-start justify-center p-4 sm:p-5 pt-safe pb-safe overflow-y-auto animate-[fadeOverlay_0.2s_ease]"
       onClick={onClose}
     >
       <div 
-        className="bg-eensa-surface rounded-[20px] p-8 w-full max-w-[460px] shadow-[0_24px_64px_rgba(26,58,34,0.28)] animate-modal-up"
+        className="bg-eensa-surface rounded-[20px] p-6 sm:p-8 w-full max-w-[460px] shadow-[0_24px_64px_rgba(26,58,34,0.28)] animate-modal-up my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Icon */}
-        <div className={`w-20 h-20 ${styles.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-5`}>
-          {styles.icon}
+        <div className={`w-16 sm:w-20 h-16 sm:h-20 ${styles.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-5`}>
+          <div className="scale-75 sm:scale-100">{styles.icon}</div>
         </div>
 
         {/* Title */}
-        <h2 className="font-display font-extrabold text-[21px] text-eensa-green text-center mb-3">
+        <h2 className="font-display font-extrabold text-lg sm:text-[21px] text-eensa-green text-center mb-2 sm:mb-3">
           {title}
         </h2>
 
         {/* Message */}
-        <p className="text-[15px] text-eensa-text2 text-center leading-relaxed mb-7">
+        <p className="text-sm sm:text-[15px] text-eensa-text2 text-center leading-relaxed mb-5 sm:mb-7">
           {message}
         </p>
 
         {/* Actions */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={onClose}
-            className="flex-1 px-5 py-3 bg-eensa-surface2 border border-eensa-border rounded-xl font-display font-bold text-[14px] text-eensa-text2 cursor-pointer transition-all duration-200 hover:bg-eensa-surface3 hover:border-eensa-green-lt"
+            className="flex-1 px-4 sm:px-5 py-3 bg-eensa-surface2 border border-eensa-border rounded-xl font-display font-bold text-sm sm:text-[14px] text-eensa-text2 cursor-pointer transition-all duration-200 hover:bg-eensa-surface3 hover:border-eensa-green-lt min-h-[48px]"
           >
             {cancelText}
           </button>
           <button
             onClick={handleConfirm}
-            className={`flex-1 px-5 py-3 rounded-xl font-display font-bold text-[14px] cursor-pointer transition-all duration-200 ${styles.confirmButton} shadow-sm`}
+            className={`flex-1 px-4 sm:px-5 py-3 rounded-xl font-display font-bold text-sm sm:text-[14px] cursor-pointer transition-all duration-200 ${styles.confirmButton} shadow-sm min-h-[48px]`}
           >
             {confirmText}
           </button>

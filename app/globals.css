@@ -56,9 +56,36 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Utility para esconder scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Nunito', sans-serif;
   color: var(--text);
+}
+
+/* Safe Area Insets para iOS (notch/Dynamic Island/home indicator) */
+@supports (padding: env(safe-area-inset-top)) {
+  :root {
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-right: env(safe-area-inset-right);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+    --safe-area-left: env(safe-area-inset-left);
+  }
+}
+
+/* Fallback para navegadores sem safe-area support */
+:root {
+  --safe-area-top: 0px;
+  --safe-area-right: 0px;
+  --safe-area-bottom: 0px;
+  --safe-area-left: 0px;
 }
 
 /* Animações globais */

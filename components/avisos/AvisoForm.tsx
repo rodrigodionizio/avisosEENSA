@@ -156,13 +156,13 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
           <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
             Prioridade
           </label>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap sm:flex-nowrap gap-2">
             {(['urgente', 'normal', 'info'] as Prioridade[]).map((p) => (
               <button
                 key={p}
                 type="button"
                 onClick={() => setPrioridade(p)}
-                className={`flex-1 px-2 py-2.5 rounded-lg border-2 cursor-pointer text-center font-display font-bold text-xs transition-all leading-tight ${
+                className={`flex-1 min-w-[90px] px-2 py-2.5 rounded-lg border-2 cursor-pointer text-center font-display font-bold text-xs transition-all leading-tight ${
                   prioridade === p
                     ? p === 'urgente'
                       ? 'border-eensa-orange bg-eensa-orange-lt text-[#A04010]'
@@ -179,7 +179,7 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
         </div>
 
         {/* Row: Categoria + Autor */}
-        <div className="grid grid-cols-2 gap-3.5 mb-[17px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-[17px]">
           <div>
             <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
               Categoria
@@ -214,7 +214,7 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
         </div>
 
         {/* Row: Publicação + Expiração */}
-        <div className="grid grid-cols-2 gap-3.5 mb-[17px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-[17px]">
           <div>
             <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
               📅 Data de Publicação
@@ -249,7 +249,7 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-2 mt-6 pt-5 border-t border-eensa-border">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 mt-6 pt-5 border-t border-eensa-border">
           <Button type="button" variant="secondary" onClick={onClose} disabled={submitting}>
             Cancelar
           </Button>

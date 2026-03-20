@@ -168,17 +168,17 @@ export default function AdminPage() {
               )}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <button
               onClick={() => setSettingsModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-eensa-surface border border-eensa-border rounded-lg text-sm font-display font-semibold text-eensa-text2 hover:bg-eensa-surface2 hover:text-eensa-green transition-all duration-200"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2.5 bg-eensa-surface border border-eensa-border rounded-lg text-sm font-display font-semibold text-eensa-text2 hover:bg-eensa-surface2 hover:text-eensa-green transition-all duration-200 min-h-[48px]"
               title="Configurações do Modo TV"
             >
               <Icons.Settings size={18} />
-              <span className="hidden sm:inline">Modo TV</span>
+              <span className="hidden md:inline">Modo TV</span>
             </button>
-            <ButtonNew onClick={handleNovo}>
-              <Icons.Plus size={18} /> Novo aviso
+            <ButtonNew onClick={handleNovo} className="whitespace-nowrap">
+              <Icons.Plus size={18} /> <span className="hidden xs:inline">Novo aviso</span><span className="xs:hidden">Novo</span>
             </ButtonNew>
           </div>
         </div>
@@ -187,8 +187,8 @@ export default function AdminPage() {
         <StatsRow stats={stats} />
 
         {/* Tabs */}
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex gap-[3px] bg-eensa-surface2 p-1 rounded-[10px]">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-4">
+          <div className="flex gap-[3px] bg-eensa-surface2 p-1 rounded-[10px] overflow-x-auto scrollbar-hide">
             <button
               onClick={() => setTab('ativos')}
               className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
@@ -221,7 +221,7 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <span className="inline-flex items-center gap-1 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-2.5 py-[3px] font-display font-bold text-[11px]">
+          <span className="hidden sm:inline-flex items-center gap-1 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-2.5 py-[3px] font-display font-bold text-[11px] flex-shrink-0">
             <span 
               className="w-1.5 h-1.5 rounded-full bg-eensa-teal"
               style={{animation: 'blink 1.2s ease-in-out infinite'}}

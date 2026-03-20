@@ -59,7 +59,7 @@ export function AvisosTable({ avisos, onEdit, onDelete }: AvisosTableProps) {
           return (
             <div
               key={aviso.id}
-              className="px-5 py-3.5 border-b border-eensa-border last:border-b-0 flex items-center gap-3.5 transition-all duration-150 hover:bg-eensa-bg animate-card-in"
+              className="px-4 sm:px-5 py-4 sm:py-3.5 border-b border-eensa-border last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3.5 transition-all duration-150 hover:bg-eensa-bg animate-card-in"
               style={{animationDelay: `${index * 0.05}s`}}
             >
               {/* Badge prioridade */}
@@ -88,14 +88,27 @@ export function AvisosTable({ avisos, onEdit, onDelete }: AvisosTableProps) {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-1.5">
+              <div className="flex gap-1.5 w-full sm:w-auto justify-end">
+                {/* Botão Editar - Full em desktop, Icon em mobile */}
                 <Button 
                   variant="secondary" 
                   size="sm"
                   onClick={() => onEdit(aviso)}
+                  className="hidden sm:inline-flex"
                 >
                   <Icons.Edit size={14} /> Editar
                 </Button>
+                <Button 
+                  variant="secondary" 
+                  size="sm"
+                  icon
+                  onClick={() => onEdit(aviso)}
+                  className="sm:hidden"
+                >
+                  <Icons.Edit size={16} />
+                </Button>
+                
+                {/* Botão Delete - Sempre icon */}
                 <Button 
                   variant="danger" 
                   size="sm"
