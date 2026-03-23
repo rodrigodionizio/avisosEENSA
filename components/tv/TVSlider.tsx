@@ -105,38 +105,38 @@ export function TVSlider({ avisos }: TVSliderProps) {
       {/* Card do Aviso (COMPACTO) */}
       <div className="flex-1 flex items-center justify-center max-w-[1100px] mx-auto w-full">
         <div 
-          className={`relative ${bgGradient[aviso.prioridade]} rounded-2xl border-[3px] ${borderColor[aviso.prioridade]} p-8 shadow-2xl w-full transition-all duration-500 animate-fade-in overflow-hidden`}
-          style={{ minHeight: '360px', maxHeight: '480px' }}
+          className={`relative ${bgGradient[aviso.prioridade]} rounded-xl border-2 ${borderColor[aviso.prioridade]} p-5 shadow-2xl w-full transition-all duration-500 animate-fade-in overflow-hidden`}
+          style={{ minHeight: '240px', maxHeight: '340px' }}
         >
           {/* Barra colorida esquerda */}
-          <div className={`absolute left-0 top-0 bottom-0 w-2.5 ${barGradient[aviso.prioridade]} rounded-l-2xl`} />
+          <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${barGradient[aviso.prioridade]} rounded-l-xl`} />
 
           {/* Badges (versão TV - compacta) */}
           <div className="flex gap-2.5 flex-wrap items-center mb-4 ml-3">
             <span 
-              className={`inline-flex items-center gap-1.5 font-display font-bold text-base px-4 py-1.5 rounded-full border ${badgeStyles[aviso.prioridade]}`}
+              className={`inline-flex items-center gap-1.5 font-display font-bold text-xs lg:text-sm px-4 py-1.5 rounded-full border ${badgeStyles[aviso.prioridade]}`}
             >
               {badgeIcons[aviso.prioridade]} {badgeLabels[aviso.prioridade]}
             </span>
-            <span className="inline-block bg-eensa-surface2 text-eensa-text2 rounded-full px-4 py-1.5 text-base font-semibold border border-eensa-border font-display">
+            <span className="inline-block bg-eensa-surface2 text-eensa-text2 rounded-full px-4 py-1.5 text-xs lg:text-sm font-semibold border border-eensa-border font-display">
               {aviso.categoria}
             </span>
           </div>
 
           {/* Título */}
           <h2 
-            className={`font-display font-extrabold text-4xl leading-tight mb-4 ml-3 ${titleColor[aviso.prioridade]}`}
+            className={`font-display font-extrabold text-2xl lg:text-3xl leading-tight mb-4 ml-3 ${titleColor[aviso.prioridade]}`}
           >
             {aviso.titulo}
           </h2>
 
           {/* Corpo */}
-          <p className="text-eensa-text2 text-2xl leading-relaxed mb-5 ml-3">
+          <p className="text-eensa-text2 text-base lg:text-lg leading-relaxed mb-5 ml-3">
             {aviso.corpo}
           </p>
 
           {/* Meta */}
-          <div className="flex items-center gap-6 text-lg text-eensa-text3 ml-3">
+          <div className="flex items-center gap-6 text-sm text-eensa-text3 ml-3">
             <span className="flex items-center gap-2">
               <Icons.User size={20} className="opacity-70" /> {aviso.autor}
             </span>
@@ -150,7 +150,7 @@ export function TVSlider({ avisos }: TVSliderProps) {
                           shadow-lg p-3 border border-eensa-border/60 flex flex-col items-center gap-2">
             <QRCodeSVG 
               value={avisoUrl}
-              size={90}
+              size={64}
               level="M"
               includeMargin={false}
               fgColor="#1A6B2E"
@@ -171,18 +171,18 @@ export function TVSlider({ avisos }: TVSliderProps) {
           {/* Setas */}
           <button
             onClick={goToPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-eensa-green/90 hover:bg-eensa-green text-white rounded-full p-4 shadow-lg transition-all hover:scale-110"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-eensa-green/90 hover:bg-eensa-green text-white rounded-full p-2 shadow-lg transition-all hover:scale-110"
             aria-label="Anterior"
           >
-            <Icons.Arrow size={32} className="rotate-180" />
+            <Icons.Arrow size={20} className="rotate-180" />
           </button>
           
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-eensa-green/90 hover:bg-eensa-green text-white rounded-full p-4 shadow-lg transition-all hover:scale-110"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-eensa-green/90 hover:bg-eensa-green text-white rounded-full p-2 shadow-lg transition-all hover:scale-110"
             aria-label="Próximo"
           >
-            <Icons.Arrow size={32} />
+            <Icons.Arrow size={20} />
           </button>
 
           {/* Dots + Contador */}
@@ -194,15 +194,15 @@ export function TVSlider({ avisos }: TVSliderProps) {
                   onClick={() => goToIndex(index)}
                   className="rounded-full transition-all hover:scale-110"
                   style={{
-                    width: index === currentIndex ? '48px' : '16px',
-                    height: '16px',
+                    width: index === currentIndex ? '28px' : '10px',
+                    height: '10px',
                     backgroundColor: index === currentIndex ? 'var(--green)' : 'var(--green-lt)',
                   }}
                   aria-label={`Ir para aviso ${index + 1}`}
                 />
               ))}
             </div>
-            <div className="text-2xl font-bold text-eensa-text3">
+            <div className="text-sm font-bold text-eensa-text3">
               {currentIndex + 1} / {avisos.length}
             </div>
           </div>
