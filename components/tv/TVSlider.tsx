@@ -111,6 +111,8 @@ export function TVSlider({ avisos }: TVSliderProps) {
           {/* Barra colorida esquerda */}
           <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${barGradient[aviso.prioridade]} rounded-l-xl`} />
 
+          {/* Container de conteúdo com espaço reservado para QR code */}
+          <div className="pr-28">
           {/* Badges (versão TV - compacta) */}
           <div className="flex gap-2.5 flex-wrap items-center mb-4 ml-3">
             <span 
@@ -144,10 +146,12 @@ export function TVSlider({ avisos }: TVSliderProps) {
               <Icons.Clock size={20} className="opacity-70" /> {formatDataHora(aviso.criado_em)}
             </span>
           </div>
+          </div>
+          {/* /Container de conteúdo */}
           
           {/* QR Code discreto no canto inferior direito */}
-          <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-sm rounded-xl 
-                          shadow-lg p-3 border border-eensa-border/60 flex flex-col items-center gap-2">
+          <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg 
+                          shadow-lg p-2.5 border border-eensa-border/60 flex flex-col items-center gap-1.5">
             <QRCodeSVG 
               value={avisoUrl}
               size={64}
