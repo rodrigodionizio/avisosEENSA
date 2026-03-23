@@ -104,3 +104,47 @@ export function getAvisoUrl(aviso: Aviso, useSlug: boolean = true): string {
   }
   return `/aviso/${aviso.id}`;
 }
+
+// ============================================================================
+// TV MODE OPTIMIZATION
+// ============================================================================
+
+/**
+ * Gera preview otimizado para Modo TV
+ * 
+ * Trunca o corpo do aviso de forma inteligente para o modo TV,
+ * cortando no último espaço antes do limite para evitar palavras quebradas.
+ * 
+ * @param corpo - Texto completo do corpo do aviso
+ * @param maxChars - Limite máximo de caracteres (padrão: 280)
+ * @returns Texto truncado com "..." ou texto completo se menor que o limite
+ * 
+ * @example
+ * getTVPreview("Lorem ipsum dolor sit amet...", 50)
+ * // => "Lorem ipsum dolor sit amet consectetur..."
+ * 
+ * @remarks
+ * - 280 caracteres é o tamanho ideal para modo TV (equivalente ao Twitter)
+ * - Garante ~3-4 linhas em 1080p e ~2-3 linhas em 720p
+ * - QR code direciona para visualização completa
+ */
+export function getTVPreview(corpo: string, maxChars: number = 280): string {
+  // Se o corpo é menor ou igual ao limite, retorna completo
+  if (corpo.length <= maxChars) {
+    return corpo;
+  }
+  
+  // Truncar no limite especificado
+  const truncated = corpo.substring(0, maxChars);
+  
+  // Encontrar o último espaço para não cortar palavras
+  const lastSpace = truncated.lastIndexOf(' ');
+  
+  // Se não encontrou espaço (palavra muito longa), usa o limite direto
+  if (lastSpace === -1) {
+    return truncated + '...';
+  }
+  
+  // Corta no último espaço e adiciona reticências
+  return truncated.substring(0, lastSpace) + '...';
+}
