@@ -23,6 +23,27 @@ Sistema de avisos digitais para a Escola Estadual Nossa Senhora Aparecida (EENSA
 - ✅ **Formatação Markdown**: Negrito, itálico, listas, links e citações
 - ✅ **Segurança RLS** - Visualização pública + Gestão autenticada
 
+## 📝 Formatação de Texto com Markdown
+
+Os avisos agora suportam **formatação Markdown** para criar comunicados mais atraentes e organizados:
+
+### ✨ Formatações Disponíveis
+- **Negrito** e *itálico* para destaque
+- Listas organizadas (marcadores • ou numeradas 1. 2. 3.)
+- [Links clicáveis](https://eensa.edu.br)
+- > Citações destacadas
+- ~~Texto riscado~~
+
+### 🎯 No Painel Admin
+- **Abas Editar/Visualizar**: Preview em tempo real antes de publicar
+- **Guia integrado**: Sintaxe Markdown direto no formulário
+- **Seguro**: Bloqueio automático de scripts maliciosos (XSS prevention)
+
+### 📚 Documentação Completa
+[`.documentation/MARKDOWN_SUPPORT.md`](.documentation/MARKDOWN_SUPPORT.md) — Guia completo com exemplos e casos de uso
+
+---
+
 ## 📺 Modo TV — Otimizado para Múltiplas Resoluções
 
 O **Modo TV** (`/tv`) foi otimizado para excelente visualização em diferentes resoluções:
