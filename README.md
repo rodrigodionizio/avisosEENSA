@@ -22,6 +22,32 @@ Sistema de avisos digitais para a Escola Estadual Nossa Senhora Aparecida (EENSA
 - ✅ **3 níveis de prioridade**: Urgente, Normal, Informativo
 - ✅ **Segurança RLS** - Visualização pública + Gestão autenticada
 
+## 📺 Modo TV — Otimizado para Múltiplas Resoluções
+
+O **Modo TV** (`/tv`) foi otimizado para excelente visualização em diferentes resoluções:
+
+### ✅ Compatibilidade Testada
+- **1920×1080 (Full HD)**: Ótimo — uso eficiente do espaço
+- **1280×720 (HD 720p)**: Excelente — elementos bem proporcionados  
+- **1366×768 (SmartTV/Notebook)**: Muito bom — responsivo via breakpoint `lg:`
+- **1024×600 (TV compacta/Tablet)**: Adequado — texto legível, sem cortes
+
+### 🎯 Otimizações Implementadas
+- **Tipografia responsiva**: títulos, corpo e badges adaptam-se à tela
+- **Layout compacto**: cards menores (240-340px de altura) para melhor aproveitamento
+- **QR Code otimizado**: tamanho reduzido (64px) mantendo escaneabilidade
+- **Controles proporcionais**: setas e dots dimensionados adequadamente
+- **Classes Tailwind `lg:`**: expansão em telas maiores quando disponível
+
+### 📐 Detalhes Técnicos
+Componente: [`components/tv/TVSlider.tsx`](components/tv/TVSlider.tsx)  
+Changelog: [`.documentation/CHANGELOG_TV_OPTIMIZATION.md`](.documentation/CHANGELOG_TV_OPTIMIZATION.md)  
+Preview interativo: `.documentation/tv_mode_preview_comparison.html` (arquivo local)
+
+**Tempo de transição configurável** via painel admin ⚙️ Configurações da TV.
+
+---
+
 ## 🏗️ Arquitetura de Segurança
 
 ```
