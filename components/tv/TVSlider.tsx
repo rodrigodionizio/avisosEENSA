@@ -5,7 +5,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Aviso } from '@/types';
 import { Icons } from '@/components/ui/Icons';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import { formatDataHora, getAvisoUrl } from '@/lib/utils';
+import { getTVPreview, getAvisoUrl } from '@/lib/utils';
 import { useSettings } from '@/hooks/useSettings';
 
 interface TVSliderProps {
@@ -113,9 +113,9 @@ export function TVSlider({ avisos }: TVSliderProps) {
           <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${barGradient[aviso.prioridade]} rounded-l-xl`} />
 
           {/* Container de conteúdo com espaço reservado para QR code */}
-          <div className="pr-28">
+          <div className="pr-24">
           {/* Badges (versão TV - compacta) */}
-          <div className="flex gap-2.5 flex-wrap items-center mb-4 ml-3">
+          <div className="flex gap-2.5 flex-wrap items-center mb-3 ml-3">
             <span 
               className={`inline-flex items-center gap-1.5 font-display font-bold text-xs lg:text-sm px-4 py-1.5 rounded-full border ${badgeStyles[aviso.prioridade]}`}
             >
@@ -128,30 +128,25 @@ export function TVSlider({ avisos }: TVSliderProps) {
 
           {/* Título */}
           <h2 
-            className={`font-display font-extrabold text-2xl lg:text-3xl leading-tight mb-4 ml-3 ${titleColor[aviso.prioridade]}`}
+            className={`font-display font-extrabold text-2xl lg:text-3xl leading-tight mb-3 ml-3 ${titleColor[aviso.prioridade]}`}
           >
             {aviso.titulo}
           </h2>
 
-          {/* Corpo */}
-          <div className="text-eensa-text2 text-base lg:text-lg leading-relaxed mb-5 ml-3">
-            <MarkdownRenderer content={aviso.corpo} />
+          {/* Corpo - versão TV otimizada com preview truncado */}
+          <div className="text-eensa-text2 text-base lg:text-lg leading-relaxed mb-3 ml-3 line-clamp-4">
+            <MarkdownRenderer content={getTVPreview(aviso.corpo, 280)} />
           </div>
 
-          {/* Meta */}
-          <div className="flex items-center gap-6 text-sm text-eensa-text3 ml-3">
-            <span className="flex items-center gap-2">
-              <Icons.User size={20} className="opacity-70" /> {aviso.autor}
-            </span>
-            <span className="flex items-center gap-2">
-              <Icons.Clock size={20} className="opacity-70" /> {formatDataHora(aviso.criado_em)}
-            </span>
-          </div>
+          {/* Badge informativo - Ver completo */}
+          <div className="flex items-center gap-2 text-xs text-eensa-teal ml-3">
+            <Icons.Info size={14} />
+            <span className="font-semibold">Escaneie o QR code para ver o aviso completo</span>
           </div>
           {/* /Container de conteúdo */}
           
           {/* QR Code discreto no canto inferior direito */}
-          <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg 
+          <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-sm rounded-lg 
                           shadow-lg p-2.5 border border-eensa-border/60 flex flex-col items-center gap-1.5">
             <QRCodeSVG 
               value={avisoUrl}
