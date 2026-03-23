@@ -143,6 +143,7 @@ export function TVSlider({ avisos }: TVSliderProps) {
             <Icons.Info size={14} />
             <span className="font-semibold">Escaneie o QR code para ver o aviso completo</span>
           </div>
+          </div>
           {/* /Container de conteúdo */}
           
           {/* QR Code discreto no canto inferior direito */}
