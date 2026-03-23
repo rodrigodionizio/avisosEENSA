@@ -20,6 +20,7 @@ Sistema de avisos digitais para a Escola Estadual Nossa Senhora Aparecida (EENSA
 - ✅ **Mobile First** - totalmente responsivo
 - ✅ **Expiração automática** de avisos
 - ✅ **3 níveis de prioridade**: Urgente, Normal, Informativo
+- ✅ **Formatação Markdown**: Negrito, itálico, listas, links e citações
 - ✅ **Segurança RLS** - Visualização pública + Gestão autenticada
 
 ## 📺 Modo TV — Otimizado para Múltiplas Resoluções
