@@ -136,7 +136,9 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
           </p>
         </div>
 
-        {/*div className="flex items-center justify-between mb-1.5">
+        {/* Corpo */}
+        <div className="mb-[17px]">
+          <div className="flex items-center justify-between mb-1.5">
             <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider">
               Corpo do Aviso
             </label>
@@ -217,9 +219,7 @@ Você pode usar formatação:
               </div>
             )}
           </div>
-placeholder="Descreva o aviso com detalhes..."
-            maxLength={2000}
-          />
+
           {errors.corpo && <p className="text-eensa-red text-xs mt-1">{errors.corpo}</p>}
           <p className="text-[11px] text-eensa-text3 text-right mt-1">
             {corpo.length}/2000
