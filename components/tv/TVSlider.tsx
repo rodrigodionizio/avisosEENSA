@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Aviso } from '@/types';
 import { Icons } from '@/components/ui/Icons';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { formatDataHora, getAvisoUrl } from '@/lib/utils';
 import { useSettings } from '@/hooks/useSettings';
 
@@ -133,9 +134,9 @@ export function TVSlider({ avisos }: TVSliderProps) {
           </h2>
 
           {/* Corpo */}
-          <p className="text-eensa-text2 text-base lg:text-lg leading-relaxed mb-5 ml-3">
-            {aviso.corpo}
-          </p>
+          <div className="text-eensa-text2 text-base lg:text-lg leading-relaxed mb-5 ml-3">
+            <MarkdownRenderer content={aviso.corpo} />
+          </div>
 
           {/* Meta */}
           <div className="flex items-center gap-6 text-sm text-eensa-text3 ml-3">

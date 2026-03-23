@@ -5,6 +5,7 @@ import type { Aviso } from '@/types';
 import { Badge, Chip } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { formatDataHora, diasRestantes, prioridadeConfig, getAvisoUrl } from '@/lib/utils';
 
 interface AvisoCardProps {
@@ -102,9 +103,9 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
       </h3>
 
       {/* Corpo */}
-      <p className="text-eensa-text2 text-sm leading-relaxed mb-3">
-        {aviso.corpo}
-      </p>
+      <div className="text-eensa-text2 text-sm leading-relaxed mb-3">
+        <MarkdownRenderer content={aviso.corpo} />
+      </div>
 
       {/* Meta + Actions */}
       <div className="flex items-center justify-between pt-2.5 border-t border-eensa-border/60">

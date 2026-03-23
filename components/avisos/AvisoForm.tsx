@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import type { Aviso, AvisoFormData, Prioridade, Categoria } from '@/types';
 
 interface AvisoFormProps {
@@ -22,6 +23,8 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
   const [expiraEm, setExpiraEm] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [showMarkdownHelp, setShowMarkdownHelp] = useState(false);
 
   useEffect(() => {
     if (aviso) {
@@ -133,16 +136,88 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
           </p>
         </div>
 
-        {/* Corpo */}
-        <div className="mb-[17px]">
-          <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
-            Corpo do Aviso
-          </label>
-          <textarea
-            value={corpo}
-            onChange={(e) => setCorpo(e.target.value)}
-            className="w-full border-[1.5px] border-eensa-border rounded-lg px-[13px] py-2.5 font-body text-sm text-eensa-text bg-eensa-bg transition-all outline-none focus:border-eensa-green-mid focus:shadow-[0_0_0_3px_rgba(45,138,71,0.12)] focus:bg-white resize-vertical min-h-[90px] leading-relaxed"
-            placeholder="Descreva o aviso com detalhes..."
+        {/*div className="flex items-center justify-between mb-1.5">
+            <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider">
+              Corpo do Aviso
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowMarkdownHelp(!showMarkdownHelp)}
+              className="text-[10px] text-eensa-teal hover:text-eensa-green font-semibold transition-colors"
+            >
+              {showMarkdownHelp ? '✕ Fechar guia' : '📝 Guia de formatação'}
+            </button>
+          </div>
+
+          {/* Guia rápido de Markdown */}
+          {showMarkdownHelp && (
+            <div className="mb-3 p-3 bg-eensa-surface2 border border-eensa-border rounded-lg text-xs">
+              <p className="font-bold text-eensa-text mb-2">📝 Formatação suportada:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-eensa-text3">
+                <div><code className="bg-white px-1 rounded">**negrito**</code> → <strong>negrito</strong></div>
+                <div><code className="bg-white px-1 rounded">*itálico*</code> → <em>itálico</em></div>
+                <div><code className="bg-white px-1 rounded">~~riscado~~</code> → <del>riscado</del></div>
+                <div><code className="bg-white px-1 rounded">[link](url)</code> → link</div>
+                <div><code className="bg-white px-1 rounded">- lista</code> → • lista</div>
+                <div><code className="bg-white px-1 rounded">&gt; citação</code> → citação destacada</div>
+              </div>
+              <p className="mt-2 text-[10px] text-eensa-text3">
+                💡 Dica: Use <strong>Visualizar</strong> abaixo para ver como ficará formatado
+              </p>
+            </div>
+          )}
+
+          {/* Abas: Editar / Visualizar */}
+          <div className="border-[1.5px] border-eensa-border rounded-lg overflow-hidden">
+            <div className="flex border-b border-eensa-border bg-eensa-surface2/50">
+              <button
+                type="button"
+                onClick={() => setShowPreview(false)}
+                className={`flex-1 px-4 py-2 text-xs font-bold transition-colors ${
+                  !showPreview
+                    ? 'bg-white text-eensa-green border-b-2 border-eensa-green'
+                    : 'text-eensa-text3 hover:text-eensa-text2'
+                }`}
+              >
+                ✏️ Editar
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowPreview(true)}
+                className={`flex-1 px-4 py-2 text-xs font-bold transition-colors ${
+                  showPreview
+                    ? 'bg-white text-eensa-green border-b-2 border-eensa-green'
+                    : 'text-eensa-text3 hover:text-eensa-text2'
+                }`}
+              >
+                👁️ Visualizar
+              </button>
+            </div>
+
+            {!showPreview ? (
+              <textarea
+                value={corpo}
+                onChange={(e) => setCorpo(e.target.value)}
+                className="w-full px-[13px] py-2.5 font-body text-sm text-eensa-text bg-white transition-all outline-none resize-vertical min-h-[120px] leading-relaxed"
+                placeholder="Descreva o aviso com detalhes... 
+
+Você pode usar formatação:
+- **Negrito** para destacar
+- *Itálico* para ênfase  
+- Listas para organizar informações"
+                maxLength={2000}
+              />
+            ) : (
+              <div className="px-[13px] py-2.5 min-h-[120px] bg-white text-sm text-eensa-text2">
+                {corpo ? (
+                  <MarkdownRenderer content={corpo} />
+                ) : (
+                  <p className="text-eensa-text3 italic">Nenhum conteúdo para visualizar...</p>
+                )}
+              </div>
+            )}
+          </div>
+placeholder="Descreva o aviso com detalhes..."
             maxLength={2000}
           />
           {errors.corpo && <p className="text-eensa-red text-xs mt-1">{errors.corpo}</p>}

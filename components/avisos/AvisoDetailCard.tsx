@@ -2,6 +2,7 @@
 import type { Aviso } from '@/types';
 import { Badge, Chip } from '@/components/ui/Badge';
 import { Icons } from '@/components/ui/Icons';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { formatDataHora, diasRestantes, prioridadeConfig } from '@/lib/utils';
 
 interface AvisoDetailCardProps {
@@ -97,10 +98,8 @@ export function AvisoDetailCard({ aviso }: AvisoDetailCardProps) {
         </h1>
 
         {/* Corpo do aviso */}
-        <div className="mb-8">
-          <p className="text-lg md:text-xl text-eensa-text2 leading-relaxed whitespace-pre-wrap">
-            {aviso.corpo}
-          </p>
+        <div className="mb-8 text-lg md:text-xl text-eensa-text2 leading-relaxed">
+          <MarkdownRenderer content={aviso.corpo} />
         </div>
 
         {/* Separador */}

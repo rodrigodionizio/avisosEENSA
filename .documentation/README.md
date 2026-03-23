@@ -55,6 +55,13 @@ Documentação completa do sistema de avisos digitais da EENSA.
 |---------|-----------|----------|
 | [`../LOGOS.md`](../LOGOS.md) | Designers | Guia de uso das logos da EENSA |
 
+### Otimizações e Melhorias
+
+| Arquivo | Data | Descrição |
+|---------|------|-----------|
+| [`CHANGELOG_TV_OPTIMIZATION.md`](CHANGELOG_TV_OPTIMIZATION.md) | 23/03/2026 | **Modo TV otimizado** - Compatibilidade com múltiplas resoluções (720p-1080p) |
+| `tv_mode_preview_comparison.html` | 23/03/2026 | Preview interativo mostrando comparação antes/depois |
+
 ---
 
 ## 📖 ORDEM DE LEITURA RECOMENDADA
@@ -134,6 +141,10 @@ Se houver erro 403:
 │   ├── SEGURANCA.md               Arquitetura RLS
 │   └── SUPABASE_SETUP.md          Setup Supabase
 │
+├── ⚡ Otimizações
+│   ├── CHANGELOG_TV_OPTIMIZATION.md  Modo TV otimizado (23/03/26)
+│   └── tv_mode_preview_comparison.html  Preview interativo
+│
 └── 📝 Reports
     ├── EENSA_SYSTEM_CONTEXT.md    Contexto do sistema
     ├── SETUP.md                   Setup inicial
@@ -160,6 +171,6 @@ Se precisar de ajuda, compartilhe:
 
 ---
 
-**Última atualização**: 18/03/2026  
-**Versão da documentação**: 2.0  
+**Última atualização**: 23/03/2026  
+**Versão da documentação**: 2.1  
 **Status**: ✅ Completo e testado
