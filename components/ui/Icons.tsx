@@ -208,6 +208,14 @@ export const Icons = {
       <path d="M7 9L13 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
+
+  BarChart: ({ className = '', size = 16 }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
+      <rect x="2" y="9" width="2.5" height="5" rx="0.5" fill="currentColor" />
+      <rect x="6.5" y="6" width="2.5" height="8" rx="0.5" fill="currentColor" />
+      <rect x="11" y="3" width="2.5" height="11" rx="0.5" fill="currentColor" />
+    </svg>
+  ),
 };
 
 // Named exports para compatibilidade
