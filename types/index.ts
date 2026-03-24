@@ -58,3 +58,34 @@ export interface TVSettings {
   updated_at?: string;
   updated_by?: string;
 }
+
+// ── Confirmação de Leitura ───────────────────────────────────────────────────
+
+export interface AvisoConfirmacao {
+  id: number;
+  aviso_id: number;
+  user_id: string | null;
+  device_hash: string;
+  display_name: string | null;
+  ip_hash: string | null;
+  user_agent: string | null;
+  origem: 'web' | 'push' | 'tv' | 'qrcode';
+  confirmado_em: string;
+}
+
+export interface AvisoConfirmacaoStats {
+  aviso_id: number;
+  total_confirmacoes: number;
+  confirmacoes_autenticadas: number;
+  confirmacoes_anonimas: number;
+  via_push: number;
+  via_qrcode: number;
+  via_tv: number;
+  primeira_confirmacao: string | null;
+  ultima_confirmacao: string | null;
+}
+
+export interface ConfirmacaoStatus {
+  jaConfirmou: boolean;
+  confirmado_em: string | null;
+}

@@ -1,9 +1,11 @@
 // components/avisos/AvisoDetailCard.tsx
+'use client';
 import type { Aviso } from '@/types';
 import { Badge, Chip } from '@/components/ui/Badge';
 import { Icons } from '@/components/ui/Icons';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { formatDataHora, diasRestantes, prioridadeConfig } from '@/lib/utils';
+import { ConfirmacaoButton } from './ConfirmacaoButton';
 
 interface AvisoDetailCardProps {
   aviso: Aviso;
@@ -101,6 +103,24 @@ export function AvisoDetailCard({ aviso }: AvisoDetailCardProps) {
         <div className="mb-8 text-lg md:text-xl text-eensa-text2 leading-relaxed">
           <MarkdownRenderer content={aviso.corpo} />
         </div>
+
+        {/* Botão de confirmação de leitura */}
+        {!expirado && !inativo && (
+          <>
+            {aviso.prioridade === 'urgente' ? (
+              <div className="mb-8 pt-6 border-t border-eensa-border">
+                <p className="text-sm text-eensa-text3 mb-3">
+                  Confirme que você leu este aviso para que a escola saiba que a informação chegou até você.
+                </p>
+                <ConfirmacaoButton avisoId={aviso.id} origem="web" variant="full" />
+              </div>
+            ) : (
+              <div className="mb-8">
+                <ConfirmacaoButton avisoId={aviso.id} origem="web" variant="compact" />
+              </div>
+            )}
+          </>
+        )}
 
         {/* Separador */}
         <div className="border-t border-eensa-border pt-6 mb-2">
