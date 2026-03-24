@@ -25,16 +25,28 @@ export async function POST(req: NextRequest) {
     // ── Verificar se o aviso existe e está ativo ──────────────
     const sb = await createClient();
 
+    const now = new Date().toISOString();
+    
     const { data: aviso, error: avisoError } = await sb
       .from('avisos')
-      .select('id')
+      .select('id, ativo, publica_em, expira_em')
       .eq('id', aviso_id)
-      .gte('expira_em', new Date().toISOString())
-      .lte('publica_em', new Date().toISOString())
+      .eq('ativo', true)
+      .lte('publica_em', now)
       .maybeSingle();
 
-    if (avisoError || !aviso) {
-      return NextResponse.json({ error: 'Aviso não encontrado ou expirado' }, { status: 404 });
+    if (avisoError) {
+      console.error('Erro ao buscar aviso:', avisoError);
+      return NextResponse.json({ error: 'Erro ao buscar aviso' }, { status: 500 });
+    }
+
+    if (!aviso) {
+      return NextResponse.json({ error: 'Aviso não encontrado' }, { status: 404 });
+    }
+
+    // Verificar se expirou (se tiver data de expiração)
+    if (aviso.expira_em && new Date(aviso.expira_em) < new Date()) {
+      return NextResponse.json({ error: 'Aviso expirado' }, { status: 404 });
     }
 
     // ── Obter user_id se autenticado ─────────────────────────
