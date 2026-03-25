@@ -91,6 +91,30 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
       <div className="flex gap-1.5 flex-wrap items-center mb-[7px]">
         <Badge prioridade={aviso.prioridade} />
         <Chip>{aviso.categoria}</Chip>
+        
+        {/* Badges de público-alvo (apenas no admin) */}
+        {isAdmin && aviso.publico_alvo && aviso.publico_alvo.length > 0 && !aviso.publico_alvo.includes('todos') && (
+          <>
+            {aviso.publico_alvo.map((publico) => (
+              <span
+                key={publico}
+                className="inline-flex items-center gap-1 bg-eensa-surface border border-eensa-green rounded-full px-2 py-0.5 text-[10px] font-bold text-eensa-green uppercase"
+              >
+                {publico === 'professores' && '👨‍🏫'}
+                {publico === 'pais' && '👪'}
+                {publico === 'alunos' && '🎓'}
+                {publico}
+              </span>
+            ))}
+          </>
+        )}
+        
+        {/* Badge de turmas (se especificado) */}
+        {isAdmin && aviso.turmas && aviso.turmas.length > 0 && (
+          <span className="inline-flex items-center gap-1 bg-eensa-yellow-lt border border-eensa-yellow rounded-full px-2 py-0.5 text-[10px] font-bold text-[#8A6A00] uppercase">
+            🎒 {aviso.turmas.join(', ')}
+          </span>
+        )}
       </div>
 
       {/* Título */}

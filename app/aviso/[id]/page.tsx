@@ -5,6 +5,7 @@ import { getAvisoBySlugOrId, getOutrosAvisosAtivos } from '@/lib/supabase/querie
 import { getAvisoUrl } from '@/lib/utils';
 import { AvisoDetailCard } from '@/components/avisos/AvisoDetailCard';
 import { AvisoLinksList } from '@/components/avisos/AvisoLinksList';
+import { AvisoVisibilityCheck } from '@/components/avisos/AvisoVisibilityCheck';
 import { ShareButton } from '@/components/ui/ShareButton';
 import { EensaLogo } from '@/components/ui/Logo';
 
@@ -67,35 +68,37 @@ export default async function AvisoPage({ params }: AvisoPageProps) {
         </div>
       </header>
       
-      {/* Conteúdo principal */}
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Card do aviso */}
-        <AvisoDetailCard aviso={aviso} />
-        
-        {/* Botões de compartilhamento */}
-        <div className="mt-8">
-          <ShareButton url={avisoUrl} titulo={aviso.titulo} />
-        </div>
-        
-        {/* Sugestões de outros avisos */}
-        {outros.length > 0 && (
-          <AvisoLinksList avisos={outros} />
-        )}
-        
-        {/* Link de volta */}
-        <div className="text-center mt-8">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-eensa-teal hover:text-eensa-teal-mid 
-                       font-semibold transition-colors"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            <span>Ver todos os avisos</span>
-          </Link>
-        </div>
-      </main>
+      {/* Conteúdo principal - Verificação de visibilidade */}
+      <AvisoVisibilityCheck aviso={aviso}>
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          {/* Card do aviso */}
+          <AvisoDetailCard aviso={aviso} />
+          
+          {/* Botões de compartilhamento */}
+          <div className="mt-8">
+            <ShareButton url={avisoUrl} titulo={aviso.titulo} />
+          </div>
+          
+          {/* Sugestões de outros avisos */}
+          {outros.length > 0 && (
+            <AvisoLinksList avisos={outros} />
+          )}
+          
+          {/* Link de volta */}
+          <div className="text-center mt-8">
+            <Link 
+              href="/"
+              className="inline-flex items-center gap-2 text-eensa-teal hover:text-eensa-teal-mid 
+                         font-semibold transition-colors"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              <span>Ver todos os avisos</span>
+            </Link>
+          </div>
+        </main>
+      </AvisoVisibilityCheck>
       
       {/* Footer */}
       <footer className="bg-eensa-surface border-t border-eensa-border mt-16 py-6">

@@ -12,6 +12,12 @@ export type Categoria =
   | 'Regra'
   | 'Informativo';
 
+// ── Segmentação de Público ───────────────────────────────────────────────────
+
+export type PublicoAlvo = 'todos' | 'professores' | 'pais' | 'alunos';
+
+export type PerfilLeitor = 'professor' | 'pai' | 'aluno' | 'anonimo';
+
 export interface Aviso {
   id: number;
   titulo: string;
@@ -24,6 +30,8 @@ export interface Aviso {
   expira_em: string | null; // ISO 8601 — null = não expira
   ativo: boolean;
   slug: string;             // URL amigável (SEO slug)
+  publico_alvo: PublicoAlvo[];  // Perfis que devem visualizar este aviso
+  turmas: string[] | null;      // Turmas específicas (null = todas)
 }
 
 export interface AvisoFormData {
@@ -33,6 +41,8 @@ export interface AvisoFormData {
   categoria: Categoria;
   autor: string;
   publica_em?: string;      // Opcional: default NOW() se omitido
+  publico_alvo: PublicoAlvo[];  // Perfis que devem visualizar este aviso
+  turmas: string[] | null;      // Turmas específicas (null = todas)
   expira_em: string | null;
   slug?: string;            // Opcional: gerado automaticamente se omitido
 }
@@ -85,6 +95,29 @@ export interface AvisoConfirmacaoStats {
   ultima_confirmacao: string | null;
 }
 
+
+// ── Perfis de Leitores ───────────────────────────────────────────────────────
+
+export interface LeitorPerfil {
+  id: number;
+  device_hash: string;
+  perfil: PerfilLeitor;
+  user_id: string | null;
+  nome_completo: string | null;
+  email: string | null;
+  user_agent: string | null;
+  criado_em: string;
+  atualizado_em: string;
+}
+
+export interface ContextoLeitor {
+  perfil: PerfilLeitor;
+  deviceHash: string;
+  nomeCompleto: string | null;
+  email: string | null;
+  userId: string | null;
+  jaIdentificado: boolean;  // true se perfil foi selecionado (não-anônimo)
+}
 export interface ConfirmacaoStatus {
   jaConfirmou: boolean;
   confirmado_em: string | null;

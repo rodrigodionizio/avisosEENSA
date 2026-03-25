@@ -58,9 +58,18 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
   // Gerar slug automaticamente a partir do título
   const slug = form.slug || generateSlug(form.titulo);
   
+  // Preparar dados com segmentação de público
+  const avisoData = {
+    ...form,
+    slug,
+    ativo: true,
+    publico_alvo: form.publico_alvo || ['todos'], // Default: todos
+    turmas: form.turmas || null, // null se não especificado
+  };
+  
   const { data, error } = await sb
     .from('avisos')
-    .insert([{ ...form, slug, ativo: true }])
+    .insert([avisoData])
     .select()
     .single();
   if (error) throw error;
@@ -98,9 +107,17 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
 /** Edita aviso existente */
 export async function editarAviso(id: number, form: Partial<AvisoFormData>): Promise<Aviso> {
   // Se o título mudou, regenerar o slug
-  const updateData = { ...form };
+  const updateData: any = { ...form };
   if (form.titulo && !form.slug) {
     updateData.slug = generateSlug(form.titulo);
+  }
+  
+  // Garantir que publico_alvo e turmas sejam enviados corretamente
+  if (form.publico_alvo !== undefined) {
+    updateData.publico_alvo = form.publico_alvo;
+  }
+  if (form.turmas !== undefined) {
+    updateData.turmas = form.turmas;
   }
   
   const { data, error} = await sb

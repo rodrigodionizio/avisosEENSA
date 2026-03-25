@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next';
+import { LeitorProvider } from '@/contexts/LeitorContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -28,7 +29,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <LeitorProvider>{children}</LeitorProvider>
+      </body>
     </html>
   );
 }

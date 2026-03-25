@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { PerfilChip } from '@/components/layout/PerfilChip';
 import { EensaLogo } from '@/components/ui/Logo';
 import { Icons } from '@/components/ui/Icons';
 
@@ -27,6 +28,11 @@ export function Header() {
 
       {/* Nav */}
       <div className="flex items-center gap-2">
+        {/* Chip de perfil (só aparece se identificado) */}
+        <div className="mr-2 hidden sm:block">
+          <PerfilChip />
+        </div>
+        
         <div className="flex gap-[3px] bg-eensa-surface2 p-1 rounded-[10px]">
           <Link
             href="/"

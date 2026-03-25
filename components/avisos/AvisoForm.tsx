@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
-import type { Aviso, AvisoFormData, Prioridade, Categoria } from '@/types';
+import type { Aviso, AvisoFormData, Prioridade, Categoria, PublicoAlvo } from '@/types';
 
 interface AvisoFormProps {
   aviso?: Aviso | null;
@@ -21,6 +21,8 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
   const [autor, setAutor] = useState('');
   const [publicaEm, setPublicaEm] = useState('');
   const [expiraEm, setExpiraEm] = useState('');
+  const [publicoAlvo, setPublicoAlvo] = useState<PublicoAlvo[]>(['todos']);
+  const [turmas, setTurmas] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -35,6 +37,8 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
       setAutor(aviso.autor);
       setPublicaEm(aviso.publica_em ? aviso.publica_em.slice(0, 16) : '');
       setExpiraEm(aviso.expira_em ? aviso.expira_em.slice(0, 16) : '');
+      setPublicoAlvo(aviso.publico_alvo && aviso.publico_alvo.length > 0 ? aviso.publico_alvo : ['todos']);
+      setTurmas(aviso.turmas ? aviso.turmas.join(', ') : '');
     } else {
       // Valores padrão:
       // Publicação: AGORA
@@ -44,6 +48,10 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
       const defaultExpira = new Date();
       defaultExpira.setDate(defaultExpira.getDate() + 7);
       setExpiraEm(defaultExpira.toISOString().slice(0, 16));
+      
+      // Público-alvo: Todos (default)
+      setPublicoAlvo(['todos']);
+      setTurmas('');
     }
   }, [aviso]);
 
@@ -86,6 +94,12 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
 
     setSubmitting(true);
     try {
+      // Processar turmas: split por vírgula, trim, filtrar vazias
+      const turmasArray = turmas
+        .split(',')
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
+
       await onSave({
         titulo,
         corpo,
@@ -94,12 +108,40 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
         autor,
         publica_em: publicaEm || undefined,
         expira_em: expiraEm || null,
+        publico_alvo: publicoAlvo,
+        turmas: turmasArray.length > 0 ? turmasArray : null,
       });
       onClose();
     } catch (error) {
       console.error('Erro ao salvar:', error);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // Handler para toggle de público-alvo
+  const togglePublico = (publico: PublicoAlvo) => {
+    if (publico === 'todos') {
+      // Se marcar "todos", desmarcar todos os outros
+      setPublicoAlvo(['todos']);
+    } else {
+      // Se desmarcar "todos" estiver marcado, remover
+      let novosPublicos: PublicoAlvo[] = publicoAlvo.filter((p) => p !== 'todos');
+      
+      if (novosPublicos.includes(publico)) {
+        // Remover se já está marcado
+        novosPublicos = novosPublicos.filter((p) => p !== publico);
+      } else {
+        // Adicionar se não está marcado
+        novosPublicos.push(publico);
+      }
+
+      // Se nenhum público está marcado, voltar para "todos"
+      if (novosPublicos.length === 0) {
+        novosPublicos = ['todos'];
+      }
+
+      setPublicoAlvo(novosPublicos);
     }
   };
 
@@ -287,6 +329,58 @@ Você pode usar formatação:
             {errors.autor && <p className="text-eensa-red text-xs mt-1">{errors.autor}</p>}
           </div>
         </div>
+
+        {/* Público-Alvo (Segmentação) */}
+        <div className="mb-[17px]">
+          <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
+            👥 Público-Alvo
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {(
+              [
+                { value: 'todos', label: 'Todos', icon: '🌐' },
+                { value: 'professores', label: 'Professores', icon: '👨‍🏫' },
+                { value: 'pais', label: 'Pais', icon: '👪' },
+                { value: 'alunos', label: 'Alunos', icon: '🎓' },
+              ] as const
+            ).map(({ value, label, icon }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => togglePublico(value)}
+                className={`px-3 py-2.5 rounded-lg border-2 cursor-pointer text-center font-display font-bold text-xs transition-all leading-tight ${
+                  publicoAlvo.includes(value)
+                    ? 'border-eensa-green bg-eensa-surface text-eensa-green'
+                    : 'border-eensa-border bg-eensa-bg text-eensa-text2 hover:border-eensa-green-lt hover:bg-eensa-surface2'
+                }`}
+              >
+                {icon} {label}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-eensa-text3 mt-2">
+            ℹ️ Selecione quem deve visualizar este aviso. "Todos" sobrescreve as outras opções.
+          </p>
+        </div>
+
+        {/* Turmas (opcional) */}
+        {!publicoAlvo.includes('todos') && (
+          <div className="mb-[17px]">
+            <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
+              🎒 Turmas Específicas (Opcional)
+            </label>
+            <input
+              type="text"
+              value={turmas}
+              onChange={(e) => setTurmas(e.target.value)}
+              className="w-full border-[1.5px] border-eensa-border rounded-lg px-[13px] py-2.5 font-body text-sm text-eensa-text bg-eensa-bg transition-all outline-none focus:border-eensa-green-mid focus:shadow-[0_0_0_3px_rgba(45,138,71,0.12)] focus:bg-white"
+              placeholder="Ex: 9A, 9B, 1º Ano"
+            />
+            <p className="text-[10px] text-eensa-text3 mt-1">
+              ℹ️ Separe por vírgula. Deixe vazio para todas as turmas do público selecionado.
+            </p>
+          </div>
+        )}
 
         {/* Row: Publicação + Expiração */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-[17px]">
