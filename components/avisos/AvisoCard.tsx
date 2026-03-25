@@ -108,13 +108,6 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
             ))}
           </>
         )}
-        
-        {/* Badge de turmas (se especificado) */}
-        {isAdmin && aviso.turmas && aviso.turmas.length > 0 && (
-          <span className="inline-flex items-center gap-1 bg-eensa-yellow-lt border border-eensa-yellow rounded-full px-2 py-0.5 text-[10px] font-bold text-[#8A6A00] uppercase">
-            🎒 {aviso.turmas.join(', ')}
-          </span>
-        )}
       </div>
 
       {/* Título */}

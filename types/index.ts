@@ -25,6 +25,7 @@ export interface Aviso {
   prioridade: Prioridade;
   categoria: Categoria;
   autor: string;
+  autor_id: string | null;  // UUID do usuário autenticado que criou (null para avisos antigos)
   criado_em: string;        // ISO 8601
   publica_em: string;       // ISO 8601 — data/hora de publicação (agendamento)
   expira_em: string | null; // ISO 8601 — null = não expira
@@ -39,10 +40,10 @@ export interface AvisoFormData {
   corpo: string;
   prioridade: Prioridade;
   categoria: Categoria;
+  autor_id?: string | null; // UUID do usuário autenticado (preenchido automaticamente)
   autor: string;
   publica_em?: string;      // Opcional: default NOW() se omitido
   publico_alvo: PublicoAlvo[];  // Perfis que devem visualizar este aviso
-  turmas: string[] | null;      // Turmas específicas (null = todas)
   expira_em: string | null;
   slug?: string;            // Opcional: gerado automaticamente se omitido
 }

@@ -62,7 +62,12 @@ export async function upsertPerfilLeitor(data: {
     );
 
   if (error) {
-    console.error('Erro ao registrar perfil do leitor:', error);
+    console.error('Erro ao registrar perfil do leitor:', {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
     throw error;
   }
 }
@@ -177,4 +182,112 @@ export async function getEstatisticasPerfis(): Promise<{
   };
 
   return stats;
+}
+
+/**
+ * Retorna estatísticas detalhadas de segmentação para o dashboard admin
+ * Combina dados de leitor_perfis com avisos_confirmacoes e avisos
+ * 
+ * @returns Métricas de visualizações, alcance por perfil, e ciência
+ */
+export async function getEstatisticasSegmentacao(): Promise<{
+  visualizacoes_totais: number;
+  professores_logados: number;
+  pais_identificados: number;
+  alunos_identificados: number;
+  alcance_por_perfil: {
+    professores: number; // % de professores que visualizaram
+    pais: number;
+    alunos: number;
+  };
+  ciencia_conselho_classe: {
+    total_destinatarios: number;
+    confirmaram: number;
+    pendentes: number;
+    percentual: number;
+  };
+}> {
+  try {
+    // 1. Buscar estatísticas de perfis
+    const perfisStats = await getEstatisticasPerfis();
+    
+    // 2. Buscar total de confirmações
+    const { count: totalConfirmacoes } = await sb
+      .from('aviso_confirmacoes')
+      .select('*', { count: 'exact', head: true });
+    
+    // 3. Buscar aviso "Conselho de Classe" (exemplo de ciência específica)
+    // TODO: Implementar query específica quando tivermos avisos com público-alvo 'professores'
+    const { data: avisoConselho } = await sb
+      .from('avisos')
+      .select('id, publico_alvo')
+      .ilike('titulo', '%conselho%classe%')
+      .limit(1)
+      .maybeSingle();
+    
+    let cienciaConselho = {
+      total_destinatarios: 0,
+      confirmaram: 0,
+      pendentes: 0,
+      percentual: 0,
+    };
+    
+    if (avisoConselho) {
+      const { count: confirmacoes } = await sb
+        .from('aviso_confirmacoes')
+        .select('*', { count: 'exact', head: true })
+        .eq('aviso_id', avisoConselho.id);
+      
+      cienciaConselho = {
+        total_destinatarios: perfisStats.professores,
+        confirmaram: confirmacoes || 0,
+        pendentes: Math.max(0, perfisStats.professores - (confirmacoes || 0)),
+        percentual: perfisStats.professores > 0 
+          ? Math.round((confirmacoes || 0) / perfisStats.professores * 100)
+          : 0,
+      };
+    }
+    
+    // 4. Calcular alcance (visualizações / total de perfis identificados)
+    const totalIdentificados = perfisStats.professores + perfisStats.pais + perfisStats.alunos;
+    
+    return {
+      visualizacoes_totais: totalConfirmacoes || 0,
+      professores_logados: perfisStats.professores,
+      pais_identificados: perfisStats.pais,
+      alunos_identificados: perfisStats.alunos,
+      alcance_por_perfil: {
+        professores: perfisStats.professores > 0 
+          ? Math.round((perfisStats.professores / totalIdentificados) * 100) 
+          : 0,
+        pais: perfisStats.pais > 0 
+          ? Math.round((perfisStats.pais / totalIdentificados) * 100) 
+          : 0,
+        alunos: perfisStats.alunos > 0 
+          ? Math.round((perfisStats.alunos / totalIdentificados) * 100) 
+          : 0,
+      },
+      ciencia_conselho_classe: cienciaConselho,
+    };
+  } catch (error) {
+    console.error('Erro ao buscar estatísticas de segmentação:', error);
+    // Retornar valores zerados em caso de erro
+    return {
+      visualizacoes_totais: 0,
+      professores_logados: 0,
+      pais_identificados: 0,
+      alunos_identificados: 0,
+      alcance_por_perfil: {
+        professores: 0,
+        pais: 0,
+        alunos: 0,
+      },
+      ciencia_conselho_classe: {
+        total_destinatarios: 0,
+        confirmaram: 0,
+        pendentes: 0,
+        percentual: 0,
+      },
+    };
+  }
 }

@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useLeitor } from '@/contexts/LeitorContext';
-import { getDominioPermitido } from '@/lib/auth/domain-check';
+import { AlertDialog } from '@/components/ui/AlertDialog';
 
 /**
  * Componente de seleção de perfil (Professores, Pais, Alunos)
@@ -15,6 +15,12 @@ import { getDominioPermitido } from '@/lib/auth/domain-check';
 export function ProfileSelector() {
   const { setPerfilSimples, loginGoogle } = useLeitor();
   const [loading, setLoading] = useState<string | null>(null);
+  const [alertState, setAlertState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    variant: 'danger' | 'warning' | 'info' | 'success';
+  }>({ isOpen: false, title: '', message: '', variant: 'info' });
 
   const handleProfessores = async () => {
     try {
@@ -25,7 +31,12 @@ export function ProfileSelector() {
     } catch (error) {
       console.error('Erro ao iniciar login Google:', error);
       setLoading(null);
-      alert('Erro ao conectar com o Google. Tente novamente.');
+      setAlertState({
+        isOpen: true,
+        title: 'Erro de Conexão',
+        message: 'Não foi possível conectar com o Google. Tente novamente.',
+        variant: 'danger',
+      });
     }
   };
 
@@ -34,10 +45,20 @@ export function ProfileSelector() {
       setLoading('pai');
       await setPerfilSimples('pai');
       // Contexto será atualizado automaticamente
-    } catch (error) {
-      console.error('Erro ao definir perfil Pai:', error);
+    } catch (error: any) {
+      console.error('Erro ao definir perfil Pai:', {
+        code: error?.code,
+        message: error?.message,
+        details: error?.details,
+        hint: error?.hint,
+      });
       setLoading(null);
-      alert('Erro ao registrar perfil. Tente novamente.');
+      setAlertState({
+        isOpen: true,
+        title: 'Erro ao Definir Perfil',
+        message: 'Não foi possível registrar seu perfil. Tente novamente.',
+        variant: 'danger',
+      });
     }
   };
 
@@ -46,10 +67,20 @@ export function ProfileSelector() {
       setLoading('aluno');
       await setPerfilSimples('aluno');
       // Contexto será atualizado automaticamente
-    } catch (error) {
-      console.error('Erro ao definir perfil Aluno:', error);
+    } catch (error: any) {
+      console.error('Erro ao definir perfil Aluno:', {
+        code: error?.code,
+        message: error?.message,
+        details: error?.details,
+        hint: error?.hint,
+      });
       setLoading(null);
-      alert('Erro ao registrar perfil. Tente novamente.');
+      setAlertState({
+        isOpen: true,
+        title: 'Erro ao Definir Perfil',
+        message: 'Não foi possível registrar seu perfil. Tente novamente.',
+        variant: 'danger',
+      });
     }
   };
 
@@ -84,16 +115,9 @@ export function ProfileSelector() {
           </h2>
 
           {/* Descrição */}
-          <p className="text-sm text-eensa-text3 mb-3">
-            Acesso com Google Workspace
+          <p className="text-sm text-eensa-text3">
+            Login com conta Google
           </p>
-
-          {/* Badge de domínio */}
-          <div className="inline-flex items-center gap-1.5 bg-eensa-surface rounded-full px-3 py-1">
-            <span className="text-xs font-mono text-eensa-text2">
-              {getDominioPermitido()}
-            </span>
-          </div>
 
           {/* Loading Spinner */}
           {loading === 'professor' && (
@@ -183,6 +207,16 @@ export function ProfileSelector() {
           seleção de perfil)
         </p>
       </div>
+
+      {/* Modal de Alerta */}
+      <AlertDialog
+        isOpen={alertState.isOpen}
+        onClose={() => setAlertState({ ...alertState, isOpen: false })}
+        title={alertState.title}
+        message={alertState.message}
+        variant={alertState.variant}
+        confirmText="Entendi"
+      />
     </div>
   );
 }

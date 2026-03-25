@@ -11,6 +11,7 @@ import { StatsRow } from '@/components/admin/StatsRow';
 import { AvisosTable } from '@/components/admin/AvisosTable';
 import { AvisoForm } from '@/components/avisos/AvisoForm';
 import { TVSettingsForm } from '@/components/admin/TVSettingsForm';
+import { SegmentacaoDashboard } from '@/components/admin/SegmentacaoDashboard';
 import { Toast } from '@/components/ui/Toast';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ButtonNew } from '@/components/ui/Button';
@@ -28,7 +29,8 @@ export default function AdminPage() {
   const [avisosAgendados, setAvisosAgendados] = useState<Aviso[]>([]);
   const [avisosExpirados, setAvisosExpirados] = useState<Aviso[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<'ativos' | 'agendados' | 'expirados'>('ativos');
+  const [mainTab, setMainTab] = useState<'dashboard' | 'avisos' | 'tv'>('dashboard');
+  const [avisosTab, setAvisosTab] = useState<'ativos' | 'agendados' | 'expirados'>('ativos');
   const [modalOpen, setModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -169,80 +171,136 @@ export default function AdminPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-            <button
-              onClick={() => setSettingsModalOpen(true)}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2.5 bg-eensa-surface border border-eensa-border rounded-lg text-sm font-display font-semibold text-eensa-text2 hover:bg-eensa-surface2 hover:text-eensa-green transition-all duration-200 min-h-[48px]"
-              title="Configurações do Modo TV"
-            >
-              <Icons.Settings size={18} />
-              <span className="hidden md:inline">Modo TV</span>
-            </button>
-            <ButtonNew onClick={handleNovo} className="whitespace-nowrap">
-              <Icons.Plus size={18} /> <span className="hidden xs:inline">Novo aviso</span><span className="xs:hidden">Novo</span>
-            </ButtonNew>
+            {mainTab === 'avisos' && (
+              <ButtonNew onClick={handleNovo} className="whitespace-nowrap">
+                <Icons.Plus size={18} /> <span className="hidden xs:inline">Novo aviso</span><span className="xs:hidden">Novo</span>
+              </ButtonNew>
+            )}
           </div>
         </div>
 
-        {/* Stats */}
-        <StatsRow stats={stats} />
-
-        {/* Tabs */}
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-4">
-          <div className="flex gap-[3px] bg-eensa-surface2 p-1 rounded-[10px] overflow-x-auto scrollbar-hide">
-            <button
-              onClick={() => setTab('ativos')}
-              className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-                tab === 'ativos'
-                  ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
-                  : 'bg-transparent text-eensa-text2'
-              }`}
-            >
-              <Icons.List size={16} /> Avisos ativos
-            </button>
-            <button
-              onClick={() => setTab('agendados')}
-              className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-                tab === 'agendados'
-                  ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
-                  : 'bg-transparent text-eensa-text2'
-              }`}
-            >
-              <Icons.Clock size={16} /> Agendados
-            </button>
-            <button
-              onClick={() => setTab('expirados')}
-              className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-                tab === 'expirados'
-                  ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
-                  : 'bg-transparent text-eensa-text2'
-              }`}
-            >
-              <Icons.Archive size={16} /> Expirados
-            </button>
-          </div>
-
-          <span className="hidden sm:inline-flex items-center gap-1 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-2.5 py-[3px] font-display font-bold text-[11px] flex-shrink-0">
-            <span 
-              className="w-1.5 h-1.5 rounded-full bg-eensa-teal"
-              style={{animation: 'blink 1.2s ease-in-out infinite'}}
-            />
-            Sincronizado
-          </span>
+        {/* Main Tabs */}
+        <div className="flex gap-[3px] bg-eensa-surface2 p-1 rounded-[10px] overflow-x-auto scrollbar-hide mb-6">
+          <button
+            onClick={() => setMainTab('dashboard')}
+            className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+              mainTab === 'dashboard'
+                ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                : 'bg-transparent text-eensa-text2'
+            }`}
+          >
+            <Icons.BarChart size={16} /> Dashboard
+          </button>
+          <button
+            onClick={() => setMainTab('avisos')}
+            className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+              mainTab === 'avisos'
+                ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                : 'bg-transparent text-eensa-text2'
+            }`}
+          >
+            <Icons.List size={16} /> Avisos
+          </button>
+          <button
+            onClick={() => setMainTab('tv')}
+            className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+              mainTab === 'tv'
+                ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                : 'bg-transparent text-eensa-text2'
+            }`}
+          >
+            <Icons.Settings size={16} /> Config TV
+          </button>
         </div>
 
-        {/* Table */}
-        {loading ? (
-          <div className="text-center py-10 text-eensa-text3">Carregando...</div>
-        ) : (
-          <AvisosTable
-            avisos={tab === 'ativos' ? avisosAtivos : tab === 'agendados' ? avisosAgendados : avisosExpirados}
-            onEdit={handleEdit}
-            onDelete={handleDeleteClick}
-          />
+        {/* Dashboard Tab */}
+        {mainTab === 'dashboard' && (
+          <SegmentacaoDashboard />
+        )}
+
+        {/* Avisos Tab */}
+        {mainTab === 'avisos' && (
+          <>
+            {/* Stats */}
+            <StatsRow stats={stats} />
+
+            {/* Sub-tabs */}
+            <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-4">
+              <div className="flex gap-[3px] bg-eensa-surface2 p-1 rounded-[10px] overflow-x-auto scrollbar-hide">
+                <button
+                  onClick={() => setAvisosTab('ativos')}
+                  className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                    avisosTab === 'ativos'
+                      ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                      : 'bg-transparent text-eensa-text2'
+                  }`}
+                >
+                  <Icons.List size={16} /> Avisos ativos
+                </button>
+                <button
+                  onClick={() => setAvisosTab('agendados')}
+                  className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                    avisosTab === 'agendados'
+                      ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                      : 'bg-transparent text-eensa-text2'
+                  }`}
+                >
+                  <Icons.Clock size={16} /> Agendados
+                </button>
+                <button
+                  onClick={() => setAvisosTab('expirados')}
+                  className={`px-[18px] py-[7px] rounded-[7px] font-display font-bold text-[13px] cursor-pointer border-none transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
+                    avisosTab === 'expirados'
+                      ? 'bg-eensa-surface text-eensa-green shadow-[0_1px_6px_rgba(26,107,46,0.1)]'
+                      : 'bg-transparent text-eensa-text2'
+                  }`}
+                >
+                  <Icons.Archive size={16} /> Expirados
+                </button>
+              </div>
+
+              <span className="hidden sm:inline-flex items-center gap-1 bg-[rgba(43,170,199,0.12)] text-eensa-teal border border-[rgba(43,170,199,0.3)] rounded-full px-2.5 py-[3px] font-display font-bold text-[11px] flex-shrink-0">
+                <span 
+                  className="w-1.5 h-1.5 rounded-full bg-eensa-teal"
+                  style={{animation: 'blink 1.2s ease-in-out infinite'}}
+                />
+                Sincronizado
+              </span>
+            </div>
+
+            {/* Table */}
+            {loading ? (
+              <div className="text-center py-10 text-eensa-text3">Carregando...</div>
+            ) : (
+              <AvisosTable
+                avisos={avisosTab === 'ativos' ? avisosAtivos : avisosTab === 'agendados' ? avisosAgendados : avisosExpirados}
+                onEdit={handleEdit}
+                onDelete={handleDeleteClick}
+              />
+            )}
+          </>
+        )}
+
+        {/* Config TV Tab */}
+        {mainTab === 'tv' && (
+          <div className="max-w-2xl">
+            <div className="bg-white border-[1.5px] border-eensa-border rounded-xl p-6">
+              <h3 className="font-display font-extrabold text-lg text-eensa-text mb-4">
+                ⚙️ Configurações do Modo TV
+              </h3>
+              <TVSettingsForm
+                isOpen={true}
+                currentSettings={settings}
+                onSave={handleSettingsSave}
+                onClose={() => setMainTab('dashboard')}
+                embedded={true}
+              />
+            </div>
+          </div>
         )}
       </PageWrapper>
 
-      {/* Modal */}
+      {/*  Modal */}
       <AvisoForm
         isOpen={modalOpen}
         aviso={avisoEditando}
@@ -251,14 +309,6 @@ export default function AdminPage() {
           setModalOpen(false);
           setAvisoEditando(null);
         }}
-      />
-
-      {/* Modal de Configurações TV */}
-      <TVSettingsForm
-        isOpen={settingsModalOpen}
-        currentSettings={settings}
-        onSave={handleSettingsSave}
-        onClose={() => setSettingsModalOpen(false)}
       />
 
       {/* Confirm Dialog */}

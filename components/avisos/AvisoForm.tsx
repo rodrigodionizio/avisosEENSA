@@ -22,7 +22,6 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
   const [publicaEm, setPublicaEm] = useState('');
   const [expiraEm, setExpiraEm] = useState('');
   const [publicoAlvo, setPublicoAlvo] = useState<PublicoAlvo[]>(['todos']);
-  const [turmas, setTurmas] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -38,7 +37,6 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
       setPublicaEm(aviso.publica_em ? aviso.publica_em.slice(0, 16) : '');
       setExpiraEm(aviso.expira_em ? aviso.expira_em.slice(0, 16) : '');
       setPublicoAlvo(aviso.publico_alvo && aviso.publico_alvo.length > 0 ? aviso.publico_alvo : ['todos']);
-      setTurmas(aviso.turmas ? aviso.turmas.join(', ') : '');
     } else {
       // Valores padrão:
       // Publicação: AGORA
@@ -51,7 +49,6 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
       
       // Público-alvo: Todos (default)
       setPublicoAlvo(['todos']);
-      setTurmas('');
     }
   }, [aviso]);
 
@@ -94,12 +91,6 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
 
     setSubmitting(true);
     try {
-      // Processar turmas: split por vírgula, trim, filtrar vazias
-      const turmasArray = turmas
-        .split(',')
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0);
-
       await onSave({
         titulo,
         corpo,
@@ -109,7 +100,6 @@ export function AvisoForm({ aviso, onSave, onClose, isOpen }: AvisoFormProps) {
         publica_em: publicaEm || undefined,
         expira_em: expiraEm || null,
         publico_alvo: publicoAlvo,
-        turmas: turmasArray.length > 0 ? turmasArray : null,
       });
       onClose();
     } catch (error) {
@@ -362,25 +352,6 @@ Você pode usar formatação:
             ℹ️ Selecione quem deve visualizar este aviso. "Todos" sobrescreve as outras opções.
           </p>
         </div>
-
-        {/* Turmas (opcional) */}
-        {!publicoAlvo.includes('todos') && (
-          <div className="mb-[17px]">
-            <label className="block font-display font-bold text-[11px] text-eensa-text2 uppercase tracking-wider mb-1.5">
-              🎒 Turmas Específicas (Opcional)
-            </label>
-            <input
-              type="text"
-              value={turmas}
-              onChange={(e) => setTurmas(e.target.value)}
-              className="w-full border-[1.5px] border-eensa-border rounded-lg px-[13px] py-2.5 font-body text-sm text-eensa-text bg-eensa-bg transition-all outline-none focus:border-eensa-green-mid focus:shadow-[0_0_0_3px_rgba(45,138,71,0.12)] focus:bg-white"
-              placeholder="Ex: 9A, 9B, 1º Ano"
-            />
-            <p className="text-[10px] text-eensa-text3 mt-1">
-              ℹ️ Separe por vírgula. Deixe vazio para todas as turmas do público selecionado.
-            </p>
-          </div>
-        )}
 
         {/* Row: Publicação + Expiração */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-[17px]">

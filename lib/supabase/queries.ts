@@ -58,6 +58,9 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
   // Gerar slug automaticamente a partir do título
   const slug = form.slug || generateSlug(form.titulo);
   
+  // Obter usuário autenticado (se houver)
+  const { data: { user } } = await sb.auth.getUser();
+  
   // Preparar dados com segmentação de público
   const avisoData = {
     ...form,
@@ -65,6 +68,7 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
     ativo: true,
     publico_alvo: form.publico_alvo || ['todos'], // Default: todos
     turmas: form.turmas || null, // null se não especificado
+    autor_id: user?.id || null, // Rastrear autoria se autenticado
   };
   
   const { data, error } = await sb
@@ -134,6 +138,44 @@ export async function editarAviso(id: number, form: Partial<AvisoFormData>): Pro
 export async function deletarAviso(id: number): Promise<void> {
   const { error } = await sb.from('avisos').delete().eq('id', id);
   if (error) throw error;
+}
+
+/** Retorna avisos criados por um professor específico (para painel /professor) */
+export async function getAvisosPorAutor(userId: string): Promise<Aviso[]> {
+  const { data, error } = await sb
+    .from('avisos')
+    .select('*')
+    .eq('autor_id', userId)
+    .order('criado_em', { ascending: false });
+  
+  if (error) {
+    console.error('Erro ao buscar avisos por autor:', error);
+    throw error;
+  }
+  
+  return data as Aviso[];
+}
+
+/** Retorna estatísticas de desempenho dos avisos por público-alvo (para dashboard admin) */
+export async function getDesempenhoAvisosPorPublico(): Promise<{
+  publico: string;
+  total_avisos: number;
+  avisos_urgentes: number;
+  avisos_ativos: number;
+  avisos_expirados: number;
+}[]> {
+  const { data, error } = await sb.rpc('get_desempenho_por_publico');
+  
+  if (error) {
+    // Se a function RPC não existir, retornar array vazio
+    if (error.code === 'PGRST202' || error.message?.includes('function')) {
+      console.warn('⚠️ Function get_desempenho_por_publico não encontrada. Execute migration SQL.');
+      return [];
+    }
+    throw error;
+  }
+  
+  return data || [];
 }
 
 /** Assina canal real-time de mudanças na tabela avisos */

@@ -65,3 +65,34 @@ export function onAuthStateChange(callback: (session: any) => void) {
     callback(session);
   });
 }
+
+/** 
+ * Lista de emails com permissão de acesso ADMIN.
+ * Apenas estes usuários podem acessar /admin.
+ * Professores, pais e alunos NÃO podem acessar.
+ */
+const ADMIN_EMAILS = [
+  'admin@eensa.com.br',
+  'direcao@eensa.com.br',
+  'coordenacao@eensa.com.br',
+  'rodrigo.dionizio@gmail.com',
+  // Adicionar outros emails de admins aqui
+];
+
+/** 
+ * Verifica se o usuário atual é um administrador do sistema.
+ * @returns true se o email do usuário está na lista de admins permitidos
+ */
+export async function isAdmin(): Promise<boolean> {
+  const user = await getUser();
+  if (!user || !user.email) return false;
+  return ADMIN_EMAILS.includes(user.email.toLowerCase());
+}
+
+/** 
+ * Retorna o email do usuário autenticado (se existir).
+ */
+export async function getUserEmail(): Promise<string | null> {
+  const user = await getUser();
+  return user?.email || null;
+}

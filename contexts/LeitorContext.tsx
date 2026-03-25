@@ -9,9 +9,9 @@ import {
   useCallback,
   ReactNode,
 } from 'react';
+import { usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { getDeviceHashCached } from '@/lib/device-fingerprint';
-import { isDominioValido } from '@/lib/auth/domain-check';
 import { upsertPerfilLeitor } from '@/lib/supabase/leitor-queries';
 import type { ContextoLeitor, PerfilLeitor } from '@/types';
 
@@ -38,12 +38,19 @@ export function LeitorProvider({ children }: { children: ReactNode }) {
     jaIdentificado: false,
   });
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
   const sb = createClient();
 
   // ══════════════════════════════════════════════════════════════════════════
   // Inicializar: verificar sessão Google + perfil salvo no localStorage
   // ══════════════════════════════════════════════════════════════════════════
   useEffect(() => {
+    // NÃO inicializar perfil de leitor para rotas administrativas
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/login')) {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
 
     async function init() {
@@ -59,33 +66,13 @@ export function LeitorProvider({ children }: { children: ReactNode }) {
           // ─────────────────────────────────────────────────────────────────
           // Usuário autenticado via Google OAuth
           // ─────────────────────────────────────────────────────────────────
+          // REGRA DE ACESSO:
+          // - Admins (ADMIN_EMAILS): acesso FULL via /admin/layout.tsx
+          // - Professores: visualizam avisos 'professores' + 'todos'
+          // - Validação de domínio: REMOVIDA (será aplicada apenas no painel /professor)
 
-          // VALIDAÇÃO CRÍTICA: Verificar se o email é do domínio permitido
-          if (!isDominioValido(user.email)) {
-            // Domínio inválido → fazer logout imediatamente
-            console.warn(
-              '[LeitorContext] Email com domínio inválido detectado. Fazendo logout...',
-              user.email
-            );
-            await sb.auth.signOut();
-
-            if (mounted) {
-              setContexto({
-                perfil: 'anonimo',
-                deviceHash: hash,
-                nomeCompleto: null,
-                email: null,
-                userId: null,
-                jaIdentificado: false,
-              });
-            }
-            setLoading(false);
-            return;
-          }
-
-          // Domínio válido → configurar contexto de professor
           const nome =
-            user.user_metadata?.full_name ?? user.email?.split('@')[0] ?? 'Professor';
+            user.user_metadata?.full_name ?? user.email?.split('@')[0] ?? 'Usuário';
 
           if (mounted) {
             setContexto({
@@ -109,42 +96,24 @@ export function LeitorProvider({ children }: { children: ReactNode }) {
           });
         } else {
           // ─────────────────────────────────────────────────────────────────
-          // Sem sessão Google → verificar perfil anônimo salvo (localStorage)
+          // Sem sessão Google → NÃO auto-inicializar perfil anônimo
           // ─────────────────────────────────────────────────────────────────
-          const saved = localStorage.getItem(STORAGE_KEY);
+          // REGRA DE NEGÓCIO: Usuário DEVE escolher perfil manualmente
+          // Perfis Pai/Aluno NÃO podem ser assumidos automaticamente
 
-          if (saved && (saved === 'pai' || saved === 'aluno')) {
-            const perfil: PerfilLeitor = saved === 'pai' ? 'pai' : 'aluno';
-
-            if (mounted) {
-              setContexto({
-                perfil,
-                deviceHash: hash,
-                nomeCompleto: null,
-                email: null,
-                userId: null,
-                jaIdentificado: true,
-              });
-            }
-
-            // Registrar perfil no banco (upsert)
-            await upsertPerfilLeitor({
-              device_hash: hash,
-              perfil,
-              user_agent: navigator.userAgent.slice(0, 300),
+          // ⚠️ REMOVIDO: Auto-login via localStorage
+          // Motivo: Viola regra "sistema não pode assumir perfil sem escolha"
+          
+          // Sempre inicia como anônimo (forçar seleção de perfil)
+          if (mounted) {
+            setContexto({
+              perfil: 'anonimo',
+              deviceHash: hash,
+              nomeCompleto: null,
+              email: null,
+              userId: null,
+              jaIdentificado: false,
             });
-          } else {
-            // Nenhum perfil identificado → permanece anônimo
-            if (mounted) {
-              setContexto({
-                perfil: 'anonimo',
-                deviceHash: hash,
-                nomeCompleto: null,
-                email: null,
-                userId: null,
-                jaIdentificado: false,
-              });
-            }
           }
         }
       } catch (error) {
@@ -159,7 +128,7 @@ export function LeitorProvider({ children }: { children: ReactNode }) {
     return () => {
       mounted = false;
     };
-  }, [sb]);
+  }, [sb, pathname]);
 
   // ══════════════════════════════════════════════════════════════════════════
   // Perfil simples (pai/aluno) — sem autenticação Google
@@ -169,24 +138,19 @@ export function LeitorProvider({ children }: { children: ReactNode }) {
       const hash = await getDeviceHashCached();
       const perfilLeitor: PerfilLeitor = perfil === 'pai' ? 'pai' : 'aluno';
 
-      // Persistir no localStorage para próximas sessões
-      localStorage.setItem(STORAGE_KEY, perfil);
+      // ⚠️ REGRA DE NEGÓCIO: Seleção de perfil é APENAS estado local
+      // - NÃO persiste em localStorage (usuário escolhe a cada sessão)
+      // - NÃO registra no banco leitor_perfis (operação desnecessária)
+      // - Banco será usado SÓ em confirmações (aviso_confirmacoes)
 
-      // Registrar no banco (sem dados pessoais)
-      await upsertPerfilLeitor({
-        device_hash: hash,
-        perfil: perfilLeitor,
-        user_agent: navigator.userAgent.slice(0, 300),
-      });
-
-      // Atualizar contexto local
+      // Atualizar contexto local (suficiente para filtrar avisos)
       setContexto((prev) => ({
         ...prev,
         perfil: perfilLeitor,
         deviceHash: hash,
         jaIdentificado: true,
       }));
-    } catch (error) {
+    } catch (error: any) {
       console.error('[LeitorContext] Erro ao definir perfil simples:', error);
       throw error;
     }

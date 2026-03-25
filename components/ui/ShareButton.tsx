@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button } from './Button';
 import { Toast } from './Toast';
+import { AlertDialog } from './AlertDialog';
 
 interface ShareButtonProps {
   url: string;
@@ -11,6 +12,7 @@ interface ShareButtonProps {
 
 export function ShareButton({ url, titulo = 'Aviso EENSA' }: ShareButtonProps) {
   const [showToast, setShowToast] = useState(false);
+  const [showError, setShowError] = useState(false);
   
   const handleCopy = async () => {
     try {
@@ -18,7 +20,7 @@ export function ShareButton({ url, titulo = 'Aviso EENSA' }: ShareButtonProps) {
       setShowToast(true);
     } catch (err) {
       console.error('Erro ao copiar:', err);
-      alert('Erro ao copiar link. Tente novamente.');
+      setShowError(true);
     }
   };
   
@@ -83,6 +85,15 @@ export function ShareButton({ url, titulo = 'Aviso EENSA' }: ShareButtonProps) {
           duration={3000}
         />
       )}
+
+      <AlertDialog
+        isOpen={showError}
+        onClose={() => setShowError(false)}
+        title="Erro ao Copiar"
+        message="Não foi possível copiar o link. Tente novamente."
+        variant="danger"
+        confirmText="OK"
+      />
     </>
   );
 }
