@@ -52,6 +52,23 @@ export async function POST(req: NextRequest) {
     // ── Obter user_id se autenticado ─────────────────────────
     const { data: { user } } = await sb.auth.getUser();
 
+    // ── Buscar nome do professor se autenticado ──────────────
+    let finalDisplayName: string | null = display_name?.trim().slice(0, 80) || null;
+
+    if (user?.id) {
+      // Professor autenticado: buscar nome em leitor_perfis
+      const { data: perfil } = await sb
+        .from('leitor_perfis')
+        .select('nome_completo')
+        .eq('user_id', user.id)
+        .eq('perfil', 'professor')
+        .maybeSingle();
+
+      if (perfil?.nome_completo) {
+        finalDisplayName = perfil.nome_completo.trim().slice(0, 80);
+      }
+    }
+
     // ── Hash do IP (nunca salvar o IP bruto) ─────────────────
     const ip = getClientIP(req);
     const ipHash = hashIP(ip);
@@ -63,7 +80,7 @@ export async function POST(req: NextRequest) {
         {
           aviso_id,
           device_hash,
-          display_name: display_name?.trim().slice(0, 80) || null,
+          display_name: finalDisplayName,
           user_id: user?.id ?? null,
           ip_hash: ipHash,
           user_agent: req.headers.get('user-agent')?.slice(0, 300) ?? null,

@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Icons } from '@/components/ui/Icons';
 import { getEstatisticasSegmentacao } from '@/lib/supabase/leitor-queries';
 import { getDesempenhoAvisosPorPublico } from '@/lib/supabase/queries';
+import MatrizCienciaProfessores from '@/components/admin/MatrizCienciaProfessores';
 
 interface Stats {
   visualizacoes_totais: number;
@@ -175,38 +176,8 @@ export function SegmentacaoDashboard() {
         </div>
       </div>
 
-      {/* Ciência - Conselho de Classe */}
-      <div className="bg-white border-[1.5px] border-eensa-border rounded-xl p-6">
-        <h3 className="font-display font-extrabold text-lg text-eensa-text mb-4">
-          🎓 Ciência — Conselho de Classe
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <div className="text-2xl font-extrabold text-eensa-text mb-1">
-              {stats.ciencia_conselho_classe.total_destinatarios}
-            </div>
-            <div className="text-xs text-eensa-text3">Total destinatários</div>
-          </div>
-          <div>
-            <div className="text-2xl font-extrabold text-green-600 mb-1">
-              {stats.ciencia_conselho_classe.confirmaram}
-            </div>
-            <div className="text-xs text-green-600">Confirmaram</div>
-          </div>
-          <div>
-            <div className="text-2xl font-extrabold text-orange-600 mb-1">
-              {stats.ciencia_conselho_classe.pendentes}
-            </div>
-            <div className="text-xs text-orange-600">Pendentes</div>
-          </div>
-          <div>
-            <div className="text-2xl font-extrabold text-eensa-green mb-1">
-              {stats.ciencia_conselho_classe.percentual}%
-            </div>
-            <div className="text-xs text-eensa-text3">Taxa de ciência</div>
-          </div>
-        </div>
-      </div>
+      {/* Ciência - Professores Nominais - Visão Matriz */}
+      <MatrizCienciaProfessores />
 
       {/* Desempenho dos Avisos por Público-Alvo */}
       {desempenho.length > 0 && (

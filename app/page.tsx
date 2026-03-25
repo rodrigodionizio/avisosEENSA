@@ -10,12 +10,24 @@ import { ButtonTV } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
 import { useAvisosSegmentados } from '@/hooks/useAvisosSegmentados';
 import { useLeitor } from '@/contexts/LeitorContext';
+import { useAuth } from '@/hooks/useAuth';
 import { PushPromoBanner } from '@/components/ui/PushPromoBanner';
 
 export default function HomePage() {
   const { grouped, loading, avisos } = useAvisosSegmentados();
   const { contexto, loading: leitorLoading } = useLeitor();
+  const { usuario } = useAuth();
   const urgenteCount = grouped.urgentes.length;
+
+  // Lista de emails admin permitidos
+  const adminEmails = [
+    'admin@eensa.com.br',
+    'direcao@eensa.com.br',
+    'coordenacao@eensa.com.br',
+    'rodrigo.dionizio@gmail.com',
+  ];
+
+  const isAdmin = usuario?.email && adminEmails.includes(usuario.email.toLowerCase());
 
   return (
     <>
@@ -56,11 +68,20 @@ export default function HomePage() {
                   </span>
                 </div>
               </div>
-              <Link href="/tv" className="flex-shrink-0">
-                <ButtonTV>
-                  <Icons.TV size={16} className="inline-block" /> <span className="hidden xs:inline">Modo TV</span><span className="xs:hidden">TV</span>
-                </ButtonTV>
-              </Link>
+              <div className="flex gap-2 flex-shrink-0">
+                {isAdmin && (
+                  <Link href="/admin">
+                    <ButtonTV>
+                      <Icons.Settings size={16} className="inline-block" /> <span className="hidden xs:inline">Gestão</span><span className="xs:hidden">⚙️</span>
+                    </ButtonTV>
+                  </Link>
+                )}
+                <Link href="/tv">
+                  <ButtonTV>
+                    <Icons.TV size={16} className="inline-block" /> <span className="hidden xs:inline">Modo TV</span><span className="xs:hidden">TV</span>
+                  </ButtonTV>
+                </Link>
+              </div>
             </div>
 
             {/* Banner Promocional de Push Notifications */}

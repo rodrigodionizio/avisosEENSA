@@ -211,10 +211,17 @@ export async function getEstatisticasSegmentacao(): Promise<{
     // 1. Buscar estatísticas de perfis
     const perfisStats = await getEstatisticasPerfis();
     
-    // 2. Buscar total de confirmações
-    const { count: totalConfirmacoes } = await sb
+    // 2. Buscar total de confirmações ÚNICAS por professor
+    // CORREÇÃO: Contar professores únicos, não total de confirmações
+    const { data: professoresUnicos } = await sb
       .from('aviso_confirmacoes')
-      .select('*', { count: 'exact', head: true });
+      .select('user_id')
+      .not('user_id', 'is', null); // Apenas autenticados (professores)
+    
+    // Contar user_ids únicos
+    const professoresQueConfirmaram = new Set(
+      professoresUnicos?.map(p => p.user_id) || []
+    ).size;
     
     // 3. Buscar aviso "Conselho de Classe" (exemplo de ciência específica)
     // TODO: Implementar query específica quando tivermos avisos com público-alvo 'professores'
@@ -233,17 +240,23 @@ export async function getEstatisticasSegmentacao(): Promise<{
     };
     
     if (avisoConselho) {
-      const { count: confirmacoes } = await sb
+      // Contar professores ÚNICOS que confirmaram este aviso específico
+      const { data: confirmacoesUnicas } = await sb
         .from('aviso_confirmacoes')
-        .select('*', { count: 'exact', head: true })
-        .eq('aviso_id', avisoConselho.id);
+        .select('user_id')
+        .eq('aviso_id', avisoConselho.id)
+        .not('user_id', 'is', null);
+      
+      const professoresConfirmaram = new Set(
+        confirmacoesUnicas?.map(c => c.user_id) || []
+      ).size;
       
       cienciaConselho = {
         total_destinatarios: perfisStats.professores,
-        confirmaram: confirmacoes || 0,
-        pendentes: Math.max(0, perfisStats.professores - (confirmacoes || 0)),
+        confirmaram: professoresConfirmaram,
+        pendentes: Math.max(0, perfisStats.professores - professoresConfirmaram),
         percentual: perfisStats.professores > 0 
-          ? Math.round((confirmacoes || 0) / perfisStats.professores * 100)
+          ? Math.round(professoresConfirmaram / perfisStats.professores * 100)
           : 0,
       };
     }
@@ -252,7 +265,7 @@ export async function getEstatisticasSegmentacao(): Promise<{
     const totalIdentificados = perfisStats.professores + perfisStats.pais + perfisStats.alunos;
     
     return {
-      visualizacoes_totais: totalConfirmacoes || 0,
+      visualizacoes_totais: professoresQueConfirmaram,
       professores_logados: perfisStats.professores,
       pais_identificados: perfisStats.pais,
       alunos_identificados: perfisStats.alunos,
