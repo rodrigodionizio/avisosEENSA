@@ -67,7 +67,6 @@ export async function criarAviso(form: AvisoFormData): Promise<Aviso> {
     slug,
     ativo: true,
     publico_alvo: form.publico_alvo || ['todos'], // Default: todos
-    turmas: form.turmas || null, // null se não especificado
     autor_id: user?.id || null, // Rastrear autoria se autenticado
   };
   
@@ -116,12 +115,9 @@ export async function editarAviso(id: number, form: Partial<AvisoFormData>): Pro
     updateData.slug = generateSlug(form.titulo);
   }
   
-  // Garantir que publico_alvo e turmas sejam enviados corretamente
+  // Garantir que publico_alvo seja enviado corretamente
   if (form.publico_alvo !== undefined) {
     updateData.publico_alvo = form.publico_alvo;
-  }
-  if (form.turmas !== undefined) {
-    updateData.turmas = form.turmas;
   }
   
   const { data, error} = await sb
