@@ -77,12 +77,12 @@ export function AvisoVisibilityCheck({
                 {aviso.publico_alvo.map((publico) => (
                   <span
                     key={publico}
-                    className="inline-flex items-center gap-1.5 bg-white border border-eensa-border rounded-full px-3 py-1 text-xs font-semibold text-eensa-text2"
+                    className="inline-flex items-center gap-2 bg-white border border-eensa-border rounded-full px-3 py-1.5 text-xs font-semibold text-eensa-text2"
                   >
-                    {publico === 'professores' && <Icons.Teacher size={14} />}
-                    {publico === 'pais' && <Icons.Parents size={14} />}
-                    {publico === 'alunos' && <Icons.Student size={14} />}
-                    {publico === 'todos' && <Icons.UsersGroup size={14} />}
+                    {publico === 'professores' && <Icons.Teacher size={16} className="text-purple-600" />}
+                    {publico === 'pais' && <Icons.Parents size={16} className="text-blue-600" />}
+                    {publico === 'alunos' && <Icons.Student size={16} className="text-orange-600" />}
+                    {publico === 'todos' && <Icons.UsersGroup size={16} className="text-eensa-green" />}
                     <span className="capitalize">{publico}</span>
                   </span>
                 ))}

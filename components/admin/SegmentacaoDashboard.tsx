@@ -229,11 +229,11 @@ export function SegmentacaoDashboard() {
                 {desempenho.map((row) => (
                   <tr key={row.publico} className="border-b border-eensa-border last:border-0">
                     <td className="py-3 px-4 font-semibold text-eensa-text">
-                      <span className="inline-flex items-center gap-2">
-                        {row.publico === 'todos' && <><Icons.UsersGroup size={16} /> Todos</>}
-                        {row.publico === 'professores' && <><Icons.Teacher size={16} /> Professores</>}
-                        {row.publico === 'pais' && <><Icons.Parents size={16} /> Pais</>}
-                        {row.publico === 'alunos' && <><Icons.Student size={16} /> Alunos</>}
+                      <span className="inline-flex items-center gap-2.5">
+                        {row.publico === 'todos' && <><Icons.UsersGroup size={18} className="text-eensa-green" /> Todos</>}
+                        {row.publico === 'professores' && <><Icons.Teacher size={18} className="text-purple-600" /> Professores</>}
+                        {row.publico === 'pais' && <><Icons.Parents size={18} className="text-blue-600" /> Pais</>}
+                        {row.publico === 'alunos' && <><Icons.Student size={18} className="text-orange-600" /> Alunos</>}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right text-eensa-text">{row.total_avisos}</td>

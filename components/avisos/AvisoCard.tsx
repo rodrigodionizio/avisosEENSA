@@ -99,11 +99,11 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
             {aviso.publico_alvo.map((publico) => (
               <span
                 key={publico}
-                className="inline-flex items-center gap-1 bg-eensa-surface border border-eensa-green rounded-full px-2 py-0.5 text-[10px] font-bold text-eensa-green uppercase"
+                className="inline-flex items-center gap-1.5 bg-eensa-surface border border-eensa-green rounded-full px-2.5 py-1 text-[10px] font-bold text-eensa-green uppercase"
               >
-                {publico === 'professores' && <Icons.Teacher size={10} />}
-                {publico === 'pais' && <Icons.Parents size={10} />}
-                {publico === 'alunos' && <Icons.Student size={10} />}
+                {publico === 'professores' && <Icons.Teacher size={12} className="text-purple-600" />}
+                {publico === 'pais' && <Icons.Parents size={12} className="text-blue-600" />}
+                {publico === 'alunos' && <Icons.Student size={12} className="text-orange-600" />}
                 {publico}
               </span>
             ))}

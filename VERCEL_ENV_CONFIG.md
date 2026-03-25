@@ -41,11 +41,39 @@ VAPID_SUBJECT=mailto:seu_email@eensa.com.br
 npx web-push generate-vapid-keys
 ```
 
-### 4. Base URL (Recomendado)
+### 4. Base URL (⚠️ **OBRIGATÓRIO** para OAuth Google)
 
 ```
 NEXT_PUBLIC_BASE_URL=https://avisos-eensa.vercel.app
 ```
+
+**Por que é obrigatório:**
+- Evita redirect para `localhost:3000` após login Google
+- Garante URLs corretas em compartilhamentos
+- Necessário para OAuth funcionar em produção
+
+**⚠️ ATENÇÃO:** 
+- **NÃO** configure esta variável em Development (local)
+- Configure APENAS em **Production** e **Preview**
+- A ausência desta variável causa redirect para localhost
+
+### 5. Configuração no Supabase Dashboard (CRÍTICO)
+
+Acesse: `https://supabase.com/dashboard/project/SEU_PROJETO/auth/url-configuration`
+
+**Redirect URLs permitidas** - Adicione:
+```
+https://avisos-eensa.vercel.app/auth/callback
+https://avisos-eensa.vercel.app/*
+http://localhost:3000/auth/callback (apenas para dev)
+```
+
+**Site URL:**
+```
+https://avisos-eensa.vercel.app
+```
+
+**⚠️ SEM ESTA CONFIGURAÇÃO, O OAUTH NÃO FUNCIONARÁ!**
 
 ## 🚀 Como Configurar no Vercel
 
