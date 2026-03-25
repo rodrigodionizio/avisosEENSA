@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Icons } from '@/components/ui/Icons';
 import { getEstatisticasSegmentacao } from '@/lib/supabase/leitor-queries';
 import { getDesempenhoAvisosPorPublico } from '@/lib/supabase/queries';
 
@@ -228,10 +229,12 @@ export function SegmentacaoDashboard() {
                 {desempenho.map((row) => (
                   <tr key={row.publico} className="border-b border-eensa-border last:border-0">
                     <td className="py-3 px-4 font-semibold text-eensa-text">
-                      {row.publico === 'todos' && '👥 Todos'}
-                      {row.publico === 'professores' && '🎓 Professores'}
-                      {row.publico === 'pais' && '👨‍👩‍👧 Pais'}
-                      {row.publico === 'alunos' && '👩‍🎓 Alunos'}
+                      <span className="inline-flex items-center gap-2">
+                        {row.publico === 'todos' && <><Icons.UsersGroup size={16} /> Todos</>}
+                        {row.publico === 'professores' && <><Icons.Teacher size={16} /> Professores</>}
+                        {row.publico === 'pais' && <><Icons.Parents size={16} /> Pais</>}
+                        {row.publico === 'alunos' && <><Icons.Student size={16} /> Alunos</>}
+                      </span>
                     </td>
                     <td className="py-3 px-4 text-right text-eensa-text">{row.total_avisos}</td>
                     <td className="py-3 px-4 text-right text-red-600 font-semibold">

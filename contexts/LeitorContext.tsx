@@ -161,10 +161,14 @@ export function LeitorProvider({ children }: { children: ReactNode }) {
   // ══════════════════════════════════════════════════════════════════════════
   const loginGoogle = useCallback(async () => {
     try {
+      // Detectar URL base correta (Vercel ou localhost)
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                      (typeof window !== 'undefined' ? window.location.origin : '');
+      
       await sb.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${baseUrl}/auth/callback`,
           queryParams: {
             // Força seleção de conta Google (evita auto-login com conta pessoal)
             prompt: 'select_account',

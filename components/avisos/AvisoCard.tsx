@@ -6,6 +6,7 @@ import { Badge, Chip } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Icons } from '@/components/ui/Icons';
 import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
+import { ConfirmacaoButton } from './ConfirmacaoButton';
 import { formatDataHora, diasRestantes, prioridadeConfig, getAvisoUrl } from '@/lib/utils';
 
 interface AvisoCardProps {
@@ -100,9 +101,9 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
                 key={publico}
                 className="inline-flex items-center gap-1 bg-eensa-surface border border-eensa-green rounded-full px-2 py-0.5 text-[10px] font-bold text-eensa-green uppercase"
               >
-                {publico === 'professores' && '👨‍🏫'}
-                {publico === 'pais' && '👪'}
-                {publico === 'alunos' && '🎓'}
+                {publico === 'professores' && <Icons.Teacher size={10} />}
+                {publico === 'pais' && <Icons.Parents size={10} />}
+                {publico === 'alunos' && <Icons.Student size={10} />}
                 {publico}
               </span>
             ))}
@@ -163,7 +164,7 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
       
       {/* Botão discreto de compartilhar link */}
       {!isAdmin && (
-        <div className="mt-3 pt-3 border-t border-eensa-border/40">
+        <div className="mt-3 pt-3 border-t border-eensa-border/40 space-y-3">
           <button
             onClick={copiarLink}
             className="text-xs text-eensa-teal hover:text-eensa-teal-mid hover:underline 
@@ -183,6 +184,13 @@ export function AvisoCard({ aviso, isAdmin = false, onEdit, onDelete }: AvisoCar
             </svg>
             <span>{linkCopiado ? '✓ Link copiado!' : 'Copiar link deste aviso'}</span>
           </button>
+          
+          {/* Botão de Confirmação de Leitura */}
+          <ConfirmacaoButton 
+            avisoId={aviso.id} 
+            origem="web" 
+            variant="compact" 
+          />
         </div>
       )}
     </div>

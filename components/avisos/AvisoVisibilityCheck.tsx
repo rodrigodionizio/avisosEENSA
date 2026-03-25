@@ -4,6 +4,7 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { useLeitor } from '@/contexts/LeitorContext';
+import { Icons } from '@/components/ui/Icons';
 import type { Aviso, PublicoAlvo, PerfilLeitor } from '@/types';
 
 const PERFIL_PARA_PUBLICO: Record<PerfilLeitor, PublicoAlvo[]> = {
@@ -76,12 +77,12 @@ export function AvisoVisibilityCheck({
                 {aviso.publico_alvo.map((publico) => (
                   <span
                     key={publico}
-                    className="inline-flex items-center gap-1 bg-white border border-eensa-border rounded-full px-3 py-1 text-xs font-semibold text-eensa-text2"
+                    className="inline-flex items-center gap-1.5 bg-white border border-eensa-border rounded-full px-3 py-1 text-xs font-semibold text-eensa-text2"
                   >
-                    {publico === 'professores' && '👨‍🏫'}
-                    {publico === 'pais' && '👪'}
-                    {publico === 'alunos' && '🎓'}
-                    {publico === 'todos' && '🌐'}
+                    {publico === 'professores' && <Icons.Teacher size={14} />}
+                    {publico === 'pais' && <Icons.Parents size={14} />}
+                    {publico === 'alunos' && <Icons.Student size={14} />}
+                    {publico === 'todos' && <Icons.UsersGroup size={14} />}
                     <span className="capitalize">{publico}</span>
                   </span>
                 ))}

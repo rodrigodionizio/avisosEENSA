@@ -1,10 +1,33 @@
 // components/ui/Icons.tsx
+import { 
+  GraduationCap, 
+  Users as LucideUsers, 
+  BookOpen as LucideBookOpen, 
+  Globe 
+} from 'lucide-react';
+
 interface IconProps {
   className?: string;
   size?: number;
 }
 
 export const Icons = {
+  // Segmentação de Público (Lucide React)
+  Teacher: ({ className = '', size = 16 }: IconProps) => (
+    <GraduationCap className={className} size={size} />
+  ),
+
+  Parents: ({ className = '', size = 16 }: IconProps) => (
+    <LucideUsers className={className} size={size} />
+  ),
+
+  Student: ({ className = '', size = 16 }: IconProps) => (
+    <LucideBookOpen className={className} size={size} />
+  ),
+
+  UsersGroup: ({ className = '', size = 16 }: IconProps) => (
+    <Globe className={className} size={size} />
+  ),
   // Prioridade
   Urgent: ({ className = '', size = 16 }: IconProps) => (
     <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
